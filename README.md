@@ -2,7 +2,21 @@
 
 Build accessible color systems with predictable contrast ratios using the LCH color space.
 
+Live at [palette-studio-omega.vercel.app](https://palette-studio-omega.vercel.app).
+
 This project is based on [Huetone](https://github.com/ardov/huetone) by Alexey Ardov (MIT). See [LICENSE](./LICENSE) for the original license terms.
+
+## Deploy (Vercel)
+
+The repo is linked to Vercel with GitHub integration. Pushes to `main` deploy to production; other branches get preview URLs.
+
+| Setting | Value |
+| --- | --- |
+| Framework | Next.js |
+| Install | `pnpm install --frozen-lockfile` |
+| Build | `pnpm build` |
+
+Set `NEXT_PUBLIC_SITE_URL` in the Vercel project (Production + Preview) to the deployment origin, e.g. `https://palette-studio-omega.vercel.app` for production. See `.env.example`.
 
 ## Run locally
 
