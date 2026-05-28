@@ -9,9 +9,9 @@ export const ContrastBadgeAPCA: FC<{ background: string; color: string }> = ({
 }) => {
   const cr = apcaContrast(background, color)
   return (
-    <div className="flex flex-col rounded-[var(--radius-m)] bg-[var(--color-surface-card)] text-center">
+    <div className="flex flex-col rounded-(--radius-m) bg-(--color-surface-card) text-center">
       <span
-        className="w-full rounded-[var(--radius-m)] leading-10 shadow-[inset_0_0_0_1px_var(--color-border-subtle)]"
+        className="w-full rounded-(--radius-m) leading-10 shadow-[inset_0_0_0_1px_(--color-border-subtle)]"
         style={{ background, color }}
       >
         APCA
@@ -33,9 +33,9 @@ export const ContrastBadgeWCAG: FC<{ background: string; color: string }> = ({
   const cr = wcagContrast(background, color)
   const displayCr = Math.floor(cr * 10) / 10
   return (
-    <div className="flex flex-col rounded-[var(--radius-m)] bg-[var(--color-surface-card)] text-center">
+    <div className="flex flex-col rounded-(--radius-m) bg-(--color-surface-card) text-center">
       <span
-        className="w-full rounded-[var(--radius-m)] leading-10 shadow-[inset_0_0_0_1px_var(--color-border-subtle)]"
+        className="w-full rounded-(--radius-m) leading-10 shadow-[inset_0_0_0_1px_(--color-border-subtle)]"
         style={{ background, color }}
       >
         WCAG
@@ -57,10 +57,10 @@ export const ContrastBadgeDeltaE: FC<{ background: string; color: string }> = ({
   const cr = deltaEContrast(background, color)
   const displayCr = Math.floor(cr * 10) / 10
   return (
-    <div className="col-span-full flex items-center gap-3 rounded-[var(--radius-m)] bg-[var(--color-surface-card)] px-3 py-2 text-sm">
-      <span className="text-[var(--color-text-hint)]">ΔE CIE76</span>
+    <div className="col-span-full flex items-center gap-3 rounded-(--radius-m) bg-(--color-surface-card) px-3 py-2 text-sm">
+      <span className="text-(--color-text-hint)">ΔE CIE76</span>
       <strong style={{ color: getDeltaEColor(cr) }}>{displayCr}</strong>
-      <span className="text-[var(--color-text-secondary)]">{getDeltaEComment(cr)}</span>
+      <span className="text-(--color-text-secondary)">{getDeltaEComment(cr)}</span>
     </div>
   )
 }

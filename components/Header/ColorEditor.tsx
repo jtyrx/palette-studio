@@ -35,7 +35,7 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
   return (
     <ControlGroup>
       <label className="relative isolate">
-        <span className="-translate-y-1/2 absolute top-1/2 left-0 py-1 pl-2 text-[var(--color-text-hint)]">
+        <span className="-translate-y-1/2 absolute top-1/2 left-0 py-1 pl-2 text-(--color-text-hint)">
           L
         </span>
         <Input
@@ -49,7 +49,7 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
         />
       </label>
       <label className="relative isolate">
-        <span className="-translate-y-1/2 absolute top-1/2 left-0 py-1 pl-2 text-[var(--color-text-hint)]">
+        <span className="-translate-y-1/2 absolute top-1/2 left-0 py-1 pl-2 text-(--color-text-hint)">
           C
         </span>
         <Input
@@ -63,7 +63,7 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
         />
       </label>
       <label className="relative isolate">
-        <span className="-translate-y-1/2 absolute top-1/2 left-0 py-1 pl-2 text-[var(--color-text-hint)]">
+        <span className="-translate-y-1/2 absolute top-1/2 left-0 py-1 pl-2 text-(--color-text-hint)">
           H
         </span>
         <Input

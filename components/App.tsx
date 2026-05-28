@@ -29,7 +29,7 @@ export default function App() {
       <Header />
       <main className="flex min-h-0 flex-1 max-[860px]:flex-col">
         <KeyPressHandler />
-        <section className="flex w-min min-w-[var(--layout-panel-min)] flex-col gap-4 overflow-auto p-4 max-[860px]:w-full max-[860px]:min-w-0">
+        <section className="flex w-min min-w-(--layout-panel-min) flex-col gap-4 overflow-auto p-4 max-[860px]:w-full max-[860px]:min-w-0">
           <div className="overflow-x-auto">
             <PaletteSwatches />
           </div>
@@ -39,7 +39,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="bg-[var(--color-surface-card)] flex flex-1 flex-col gap-4 overflow-auto px-6 py-4">
+        <section className="bg-(--color-surface-card) flex flex-1 flex-col gap-4 overflow-auto px-6 py-4">
           <SelectedColorCard />
           <section className="color-graph-grid">
             <Scale
@@ -123,7 +123,7 @@ const ScaleIndicator: FC<{ axis: 'l' | 'c' | 'h' }> = ({ axis }) => {
     <div className="color-graph-axis grid grid-rows-[1.625rem_auto]">
       <span className="relative inline-block">
         <span
-          className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 w-6 rounded-[var(--radius-m)] text-center text-[var(--color-text-primary)] leading-6"
+          className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 w-6 rounded-(--radius-m) text-center text-(--color-text-primary) leading-6"
           style={{
             fontWeight: pressed ? 900 : undefined,
             background: pressed ? 'var(--color-interactive-bg-active)' : 'var(--color-interactive-bg)',

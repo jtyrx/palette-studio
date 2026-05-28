@@ -33,7 +33,7 @@ export const KeyPressHandler: FC = () => {
       // Switch palette
       if (!isNaN(+key)) return switchPalette(+key - 1)
 
-      const noDefault = (func: () => any) => {
+      const noDefault = (func: () => void) => {
         e.preventDefault()
         func()
       }
@@ -42,8 +42,7 @@ export const KeyPressHandler: FC = () => {
       if (metaPressed && code === 'KeyC') return copyCurrentHex()
       if (metaPressed && code === 'KeyV') return pasteToCurrent()
       if (code === 'Escape') {
-        // @ts-ignore
-        return e?.target?.blur()
+        return (e?.target as HTMLElement | null)?.blur()
       }
 
       // Modify color
@@ -179,6 +178,7 @@ export const KeyPressHandler: FC = () => {
     selected,
     tones.length,
     hex2color,
+    incrementC,
   ])
 
   return null
@@ -189,17 +189,14 @@ function filterInput(event: KeyboardEvent) {
   const target = event.target
   if (!target) return true
 
-  // @ts-ignore
-  const { tagName, isContentEditable, readOnly } = target
-  if (isContentEditable) return false
-  // @ts-ignore
+  const el = target as HTMLElement
+  if (el.isContentEditable) return false
   // Skip range inputs
-  if (target?.type === 'range') return true
-  if (readOnly) return true
-  if (['INPUT', 'TEXTAREA', 'SELECT'].includes(tagName)) return false
-  // @ts-ignore
+  if ((el as HTMLInputElement).type === 'range') return true
+  if ((el as HTMLInputElement).readOnly) return true
+  if (['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName)) return false
   // Skip menu items
-  if (target?.getAttribute?.('role') === 'menuitem') return false
+  if (el.getAttribute?.('role') === 'menuitem') return false
   return true
 }
 

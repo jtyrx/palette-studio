@@ -8,7 +8,7 @@ const PaletteStudioClient = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="min-h-screen flex-1 bg-[var(--color-surface-default)]"
+        className="min-h-screen flex-1 bg-(--color-surface-default)"
         aria-busy="true"
         aria-label="Loading Palette Studio"
       />
