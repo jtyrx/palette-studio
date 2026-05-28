@@ -1,4 +1,4 @@
-import chroma from 'chroma-js'
+import Color from 'colorjs.io'
 import { LCH, RGB, spaceName, TColor, XYZ } from '../types'
 import { clamp } from '../utils'
 import { oklch, cielch } from './colorModels'
@@ -71,11 +71,13 @@ function colorSpaceMaker(colorSpace: TLchModel): TColorSpace {
   }
 
   function hex2color(hex: string): TColor | null {
-    if (!chroma.valid(hex)) return null
-    const rgb = chroma(hex)
-      .rgb()
-      .map(c => c / 255) as RGB
-    if (!rgb) return null
+    let col: Color
+    try {
+      col = new Color(hex)
+    } catch {
+      return null
+    }
+    const rgb = col.to('srgb').coords as RGB
     const [l, c, h] = rgb2lch(rgb)
     const [r, g, b] = rgb.map(c => clamp(c * 255, 0, 255))
 

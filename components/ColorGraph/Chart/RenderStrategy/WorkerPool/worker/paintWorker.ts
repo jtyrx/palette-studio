@@ -18,9 +18,9 @@ export type DrawChartProps = {
 
 const getSrgbPixel = (): TPixelData => [255, 255, 255, 255]
 const getP3pixel = (x: number, y: number): TPixelData => [198, 198, 198, 255]
-const getRec2020pixel = (x: number, y: number): TPixelData => [
-  171, 171, 171, 255,
-]
+const getRec2020pixel = (x: number, y: number): TPixelData => [171, 171, 171, 255]
+// 1px stroke at the sRGB→P3 gamut boundary
+const P3_CONTOUR: TPixelData = [130, 130, 130, 255]
 
 function drawLuminosityChart(props: DrawChartProps) {
   const {
@@ -50,32 +50,31 @@ function drawLuminosityChart(props: DrawChartProps) {
     let c = chromaScale(x)
     let h = hueScale(x)
     let hadColors = false
+    let wasInSRGB = false
 
     for (let y = height; y >= 0; y--) {
       let l = sycledLerp(ranges.l.max, ranges.l.min, y / height)
-      const { r, g, b, within_sRGB, within_P3, within_Rec2020 } = lch2color([
-        l,
-        c,
-        h,
-      ])
-      const displayable = showRec2020
-        ? within_Rec2020
-        : showP3
-        ? within_P3
-        : within_sRGB
-      // Luminosity chart only have colors in the middle. So if the current color is undisplayable and we already had displayable colors, there will be no more displayable colors.
-      if (!displayable && hadColors) break
+      const { r, g, b, within_sRGB, within_P3, within_Rec2020 } = lch2color([l, c, h])
 
       const dx = x - widthFrom
       if (within_sRGB) {
         hadColors = true
+        wasInSRGB = true
         pixels.setPixel(dx, y, showColors ? [r, g, b, 255] : getSrgbPixel())
+      } else if (wasInSRGB && within_P3) {
+        pixels.setPixel(dx, y, P3_CONTOUR)
+        wasInSRGB = false
       } else if (showP3 && within_P3) {
         pixels.setPixel(dx, y, getP3pixel(dx, y))
       } else if (showRec2020 && within_Rec2020) {
-        // const v = ((Math.sin((x + y * -0.8) * 1.5) + 1) / 2) * 55 + 200
         pixels.setPixel(dx, y, getRec2020pixel(dx, y))
+      } else {
+        wasInSRGB = false
       }
+
+      // Luminosity chart only has colors in the middle; once undisplayable after hadColors, no more will appear.
+      const displayable = showRec2020 ? within_Rec2020 : showP3 ? within_P3 : within_sRGB
+      if (!displayable && hadColors) break
     }
   }
 
@@ -114,29 +113,30 @@ function drawChromaChart(props: DrawChartProps) {
 
     // TODO: another good optimisation is to remember previous last displayable color and start from it. Or even combine it with binary search.
 
+    let wasInSRGB = false
+
     for (let y = height; y >= 0; y--) {
       let c = sycledLerp(ranges.c.max, ranges.c.min, y / height)
-      const { r, g, b, within_sRGB, within_P3, within_Rec2020 } = lch2color([
-        l,
-        c,
-        h,
-      ])
-      const displayable = showRec2020
-        ? within_Rec2020
-        : showP3
-        ? within_P3
-        : within_sRGB
-      // If color with this chroma is undisplayable, then all colors with higher chroma also will be undisplayable so we can just finish with this column.
-      if (!displayable) break
+      const { r, g, b, within_sRGB, within_P3, within_Rec2020 } = lch2color([l, c, h])
 
       const dx = x - widthFrom
       if (within_sRGB) {
+        wasInSRGB = true
         pixels.setPixel(dx, y, showColors ? [r, g, b, 255] : getSrgbPixel())
+      } else if (wasInSRGB && within_P3) {
+        pixels.setPixel(dx, y, P3_CONTOUR)
+        wasInSRGB = false
       } else if (showP3 && within_P3) {
         pixels.setPixel(dx, y, getP3pixel(dx, y))
       } else if (showRec2020 && within_Rec2020) {
         pixels.setPixel(dx, y, getRec2020pixel(dx, y))
+      } else {
+        wasInSRGB = false
       }
+
+      // If color with this chroma is undisplayable, all colors with higher chroma also will be undisplayable.
+      const displayable = showRec2020 ? within_Rec2020 : showP3 ? within_P3 : within_sRGB
+      if (!displayable) break
     }
   }
 
@@ -170,21 +170,25 @@ function drawHueChart(props: DrawChartProps) {
     let l = luminostyScale(x)
     let c = chromaScale(x)
 
+    let wasInSRGB = false
+
     for (let y = height; y >= 0; y--) {
       let h = sycledLerp(ranges.h.max, ranges.h.min, y / height)
-      const { r, g, b, within_sRGB, within_P3, within_Rec2020 } = lch2color([
-        l,
-        c,
-        h,
-      ])
+      const { r, g, b, within_sRGB, within_P3, within_Rec2020 } = lch2color([l, c, h])
 
       const dx = x - widthFrom
       if (within_sRGB) {
+        wasInSRGB = true
         pixels.setPixel(dx, y, showColors ? [r, g, b, 255] : getSrgbPixel())
+      } else if (wasInSRGB && within_P3) {
+        pixels.setPixel(dx, y, P3_CONTOUR)
+        wasInSRGB = false
       } else if (showP3 && within_P3) {
         pixels.setPixel(dx, y, getP3pixel(dx, y))
       } else if (showRec2020 && within_Rec2020) {
         pixels.setPixel(dx, y, getRec2020pixel(dx, y))
+      } else {
+        wasInSRGB = false
       }
     }
   }

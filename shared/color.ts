@@ -1,40 +1,43 @@
 import chroma from 'chroma-js'
+import Color from 'colorjs.io'
 import { APCAcontrast, sRGBtoY } from 'apca-w3'
 import { TColor } from './types'
+
+const hexTo255 = (hex: string) =>
+  new Color(hex).to('srgb').coords.map((v: number | null) => (v ?? 0) * 255) as [number, number, number]
 
 export const wcagContrast = (backgroundHex: string, textHex: string): number =>
   chroma.contrast(backgroundHex, textHex)
 
 export const apcaContrast = (backgroundHex: string, textHex: string): number =>
   Math.round(
-    Math.abs(
-      +APCAcontrast(
-        sRGBtoY(chroma(textHex).rgb()),
-        sRGBtoY(chroma(backgroundHex).rgb())
-      )
-    )
+    +APCAcontrast(sRGBtoY(hexTo255(textHex)), sRGBtoY(hexTo255(backgroundHex)))
   )
 
-export const deltaEContrast = (
-  backgroundHex: string,
-  textHex: string
-): number => chroma.deltaE(backgroundHex, textHex)
+export const deltaEContrast = (backgroundHex: string, textHex: string): number =>
+  chroma.deltaE(backgroundHex, textHex)
 
 export const getMostContrast = (color: string, colorList: string[]): string => {
-  const contrastRatios = colorList.map(c => apcaContrast(color, c))
+  const contrastRatios = colorList.map(c => Math.abs(apcaContrast(color, c)))
   const maxContrast = Math.max(...contrastRatios)
   const i = contrastRatios.indexOf(maxContrast)
   return colorList[i]
 }
 
-export const valid = chroma.valid
+export const valid = (hex: string): boolean => {
+  try {
+    new Color(hex)
+    return true
+  } catch {
+    return false
+  }
+}
 
 export const colorToLchString = (color: TColor) => {
   const { mode, l, c, h } = color
   if (mode === 'cielch') {
     return `lch(${round(l)}% ${round(c, 3)} ${round(h)})`
   } else if (mode === 'oklch') {
-    // In Feb 2022 it's only available in Safari TP
     return `oklch(${round(l)}% ${round(c, 3)} ${round(h)})`
   }
   return ''

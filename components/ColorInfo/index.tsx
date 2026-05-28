@@ -6,7 +6,7 @@ import { selectedStore } from '@/store/currentPosition'
 import { paletteStore } from '@/store/palette'
 import { valid } from '@/shared/color'
 import { Input } from '../inputs'
-import { ContrastBadgeAPCA, ContrastBadgeWCAG } from './ContrastBadge'
+import { ContrastBadgeAPCA, ContrastBadgeWCAG, ContrastBadgeDeltaE } from './ContrastBadge'
 
 export const ColorInfo: FC = () => {
   const { tones } = useStore(paletteStore)
@@ -52,6 +52,7 @@ const ContrastGroup: FC<{ versusColor: string }> = props => {
       <ContrastBadgeAPCA background={additionalColor} color={hex} />
       <ContrastBadgeAPCA background={hex} color={additionalColor} />
       <ContrastBadgeWCAG background={additionalColor} color={hex} />
+      <ContrastBadgeDeltaE background={additionalColor} color={hex} />
     </div>
   )
 }
