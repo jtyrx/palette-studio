@@ -42,7 +42,7 @@ export default function App() {
           <section
             className="grid gap-4"
             style={{
-              gridTemplateColumns: `${chartWidth}px 8px ${chartWidth}px`,
+              gridTemplateColumns: `${chartWidth}px 0.5rem ${chartWidth}px`,
             }}
           >
             <Scale
@@ -127,7 +127,7 @@ export default function App() {
 const ScaleIndicator: FC<{ axis: 'l' | 'c' | 'h' }> = ({ axis }) => {
   const pressed = useKeyPress('Key' + axis.toUpperCase())
   return (
-    <div className="grid grid-rows-[26px_auto]">
+    <div className="grid grid-rows-[1.625rem_auto]">
       <span className="relative inline-block">
         <span
           className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 w-6 rounded-[var(--radius-m)] text-center text-[var(--color-text-primary)] leading-6"

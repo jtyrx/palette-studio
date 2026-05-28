@@ -248,7 +248,7 @@ body {
 ::-webkit-scrollbar-thumb {
   background-color: var(--color-scrollbar);
   border-radius: 0.375rem;
-  border: 2px solid var(--color-surface-default);
+  border: 0.125rem solid var(--color-surface-default);
 }
 
 /* ─── Graph controls ───────────────────────────────────────────────────────── */
@@ -260,7 +260,7 @@ body {
   padding: 0;
   min-width: 0;
   flex: 1 0;
-  border: 2px solid transparent;
+  border: 0.125rem solid transparent;
   -moz-appearance: textfield;
 }
 
@@ -323,7 +323,7 @@ body {
   height: 0.9375rem;
   background: transparent;
   border-radius: 0.8125rem;
-  box-shadow: 0 0 2px 0 var(--contrast, gray);
+  box-shadow: 0 0 0.125rem 0 var(--contrast, gray);
   cursor: grab;
   transition: 100ms ease-in-out;
   -webkit-appearance: none;
@@ -336,7 +336,7 @@ body {
   height: 0.9375rem;
   background: transparent;
   border-radius: 0.8125rem;
-  box-shadow: -3px 0 4px 0 rgb(0 0 0 / 0.2);
+  box-shadow: -0.1875rem 0 0.25rem 0 rgb(0 0 0 / 0.2);
   cursor: grab;
   transition: 100ms ease-in-out;
 }
@@ -348,22 +348,22 @@ body {
 
 .graph-knob[data-selected='true']::-webkit-slider-thumb {
   transform: scale(1);
-  border: 5px solid var(--bg, gray);
+  border: 0.3125rem solid var(--bg, gray);
 }
 
 .graph-knob[data-selected='false']::-webkit-slider-thumb {
   transform: scale(0.75);
-  border: 8px solid var(--bg, gray);
+  border: 0.5rem solid var(--bg, gray);
 }
 
 .graph-knob[data-selected='true']::-moz-range-thumb {
   transform: scale(1);
-  border: 5px solid var(--bg, gray);
+  border: 0.3125rem solid var(--bg, gray);
 }
 
 .graph-knob[data-selected='false']::-moz-range-thumb {
   transform: scale(0.75);
-  border: 8px solid var(--bg, gray);
+  border: 0.5rem solid var(--bg, gray);
 }
 
 /* ─── Tailwind base layer ──────────────────────────────────────────────────── */

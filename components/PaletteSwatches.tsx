@@ -54,8 +54,8 @@ export const PaletteSwatches: FC = () => {
     <div
       className="group grid"
       style={{
-        gridTemplateColumns: `64px repeat(${toneCount}, 48px) 24px`,
-        gridTemplateRows: `32px repeat(${hueCount}, 48px) 24px`,
+        gridTemplateColumns: `4rem repeat(${toneCount}, 3rem) 1.5rem`,
+        gridTemplateRows: `2rem repeat(${hueCount}, 3rem) 1.5rem`,
       }}
     >
       <div />

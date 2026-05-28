@@ -30,7 +30,7 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
   }
 
   const channelNumClass =
-    'channel-input [-moz-appearance:textfield] h-full w-20 py-[5px] pl-6 pr-2 text-sm leading-5 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none'
+    'channel-input [-moz-appearance:textfield] h-full w-20 py-[0.3125rem] pl-6 pr-2 text-sm leading-5 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none'
 
   return (
     <ControlGroup>

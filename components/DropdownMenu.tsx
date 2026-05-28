@@ -83,7 +83,7 @@ export function Content({
   return (
     <DropdownMenuContent
       className={cn(
-        'z-[1000] max-h-[calc(100vh-64px)] min-w-0 w-auto rounded-[var(--radius-m)] bg-[var(--color-surface-card)] p-0.5 py-2 text-[var(--color-text-primary)] shadow-lg ring-0',
+        'z-[1000] max-h-[calc(100vh-4rem)] min-w-0 w-auto rounded-[var(--radius-m)] bg-[var(--color-surface-card)] p-0.5 py-2 text-[var(--color-text-primary)] shadow-lg ring-0',
         className
       )}
       {...props}

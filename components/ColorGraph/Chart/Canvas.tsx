@@ -98,8 +98,8 @@ export function Canvas(props: {
         backgroundColor: 'var(--color-canvas-2)',
         backgroundImage:
           'linear-gradient(45deg, var(--color-canvas-1) 25%, transparent 25%), linear-gradient(-45deg, var(--color-canvas-1) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--color-canvas-1) 75%), linear-gradient(-45deg, transparent 75%, var(--color-canvas-1) 75%)',
-        backgroundSize: '6px 6px',
-        backgroundPosition: '0 0, 0 3px, 3px -3px, -3px 0px',
+        backgroundSize: '0.375rem 0.375rem',
+        backgroundPosition: '0 0, 0 0.1875rem, 0.1875rem -0.1875rem, -0.1875rem 0',
       }}
     >
       <canvas

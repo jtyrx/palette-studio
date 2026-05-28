@@ -54,7 +54,7 @@ export const InvisibleInput = React.forwardRef<
 })
 
 const inputClass =
-  'rounded-[var(--radius-m)] border border-transparent bg-[var(--color-interactive-bg)] px-2 py-[5px] text-sm leading-5 text-[var(--color-text-primary)] transition-[border-color,color] duration-100 focus:border-[var(--color-text-primary)] focus:text-[var(--color-text-primary)] focus:outline-none'
+  'rounded-[var(--radius-m)] border border-transparent bg-[var(--color-interactive-bg)] px-2 py-[0.3125rem] text-sm leading-5 text-[var(--color-text-primary)] transition-[border-color,color] duration-100 focus:border-[var(--color-text-primary)] focus:text-[var(--color-text-primary)] focus:outline-none'
 
 export const Input = React.forwardRef<
   HTMLInputElement,

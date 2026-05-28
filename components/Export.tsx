@@ -50,7 +50,7 @@ export const ExportField: FC = () => {
   return (
     <TextArea
       ref={ref}
-      className="min-h-[120px] w-full resize-none"
+      className="min-h-30 w-full resize-none"
       onBlur={() => setAreaValue(currentJSON)}
       value={areaValue}
       onFocus={e => e.target.select()}

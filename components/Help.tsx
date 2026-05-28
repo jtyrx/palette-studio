@@ -77,7 +77,7 @@ const HotkeysSection = () => {
         </li>
         <li>
           <Key>{metaKeyLabel()}</Key> + <Key>⇧</Key> + <Key>C</Key> — copy selected color in{' '}
-          <code className="rounded-[var(--radius-m)] border border-[var(--color-border-subtle)] px-[3px] font-mono">
+          <code className="rounded-[var(--radius-m)] border border-[var(--color-border-subtle)] px-0.75 font-mono">
             lch()
           </code>{' '}
           format. Note that it has limited{' '}
