@@ -2,7 +2,7 @@
 
 import type { HTMLAttributes } from 'react'
 import { FC } from 'react'
-import { CSSExportButton, TokenExportButton } from './Export'
+import { CSSExportButton, TokenExportButton } from './ExportButtons'
 
 export const Help: FC = () => (
   <div className="mt-6">

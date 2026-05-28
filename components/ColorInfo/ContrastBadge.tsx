@@ -3,13 +3,18 @@
 import React, { FC } from 'react'
 import { apcaContrast, wcagContrast, deltaEContrast } from '@/shared/color'
 
-export const ContrastBadgeAPCA: FC<{ background: string; color: string }> = ({
-  background,
-  color,
-}) => {
+export const ContrastBadgeAPCA: FC<{
+  background: string
+  color: string
+  polarity?: 'versus-on-selected' | 'selected-on-versus'
+}> = ({ background, color, polarity }) => {
   const cr = apcaContrast(background, color)
   return (
-    <div className="flex flex-col rounded-(--radius-m) bg-(--color-surface-card) text-center">
+    <div
+      data-slot="contrast-badge-apca"
+      data-polarity={polarity}
+      className="flex flex-col rounded-(--radius-m) bg-(--color-surface-card) text-center"
+    >
       <span
         className="w-full rounded-(--radius-m) leading-10 shadow-[inset_0_0_0_1px_(--color-border-subtle)]"
         style={{ background, color }}
@@ -33,7 +38,10 @@ export const ContrastBadgeWCAG: FC<{ background: string; color: string }> = ({
   const cr = wcagContrast(background, color)
   const displayCr = Math.floor(cr * 10) / 10
   return (
-    <div className="flex flex-col rounded-(--radius-m) bg-(--color-surface-card) text-center">
+    <div
+      data-slot="contrast-badge-wcag"
+      className="flex flex-col rounded-(--radius-m) bg-(--color-surface-card) text-center"
+    >
       <span
         className="w-full rounded-(--radius-m) leading-10 shadow-[inset_0_0_0_1px_(--color-border-subtle)]"
         style={{ background, color }}
@@ -57,7 +65,10 @@ export const ContrastBadgeDeltaE: FC<{ background: string; color: string }> = ({
   const cr = deltaEContrast(background, color)
   const displayCr = Math.floor(cr * 10) / 10
   return (
-    <div className="col-span-full flex items-center gap-3 rounded-(--radius-m) bg-(--color-surface-card) px-3 py-2 text-sm">
+    <div
+      data-slot="contrast-badge-delta-e"
+      className="col-span-full flex items-center gap-3 rounded-(--radius-m) bg-(--color-surface-card) px-3 py-2 text-sm"
+    >
       <span className="text-(--color-text-hint)">ΔE CIE76</span>
       <strong style={{ color: getDeltaEColor(cr) }}>{displayCr}</strong>
       <span className="text-(--color-text-secondary)">{getDeltaEComment(cr)}</span>

@@ -1,6 +1,6 @@
 import React, { FC, SVGProps } from 'react'
 
-export const SunIcon: FC<SVGProps<SVGSVGElement>> = props => (
+export const Sun: FC<SVGProps<SVGSVGElement>> = props => (
   <svg
     width="20"
     height="20"

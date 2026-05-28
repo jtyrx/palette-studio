@@ -1,6 +1,7 @@
 export { parseHexPalette } from './converters'
 export { validatePalette } from './converters'
-export { exportToHexPalette } from './converters'
+export { exportToHexPalette, normalizeHexPalette } from './converters'
+export { hydratePaletteFromList, runWithoutHydrate } from './hydrate'
 export { exportToTokens } from './converters'
 export { parseOldLchPalette } from './converters'
 export { jsonToHexPalette } from './converters'

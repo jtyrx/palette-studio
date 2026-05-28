@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Button } from '../inputs'
+import { Button } from '@/components/ui/button'
 import { Settings } from '@/shared/icons/Settings'
 import {
   chartSettingsStore,

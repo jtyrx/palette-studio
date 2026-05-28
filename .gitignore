@@ -28,3 +28,9 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Claude Code — local machine settings (permissions, paths)
+.claude/settings.local.json
+
+# Optional: other local Claude overrides if you create them later
+.claude/*.local.json

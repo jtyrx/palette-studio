@@ -1,6 +1,6 @@
 # CLAUDE.md — Palette Studio
 
-**Master reference for Claude Code.** AGENTS.md (Cursor) is kept in sync with this file. When the two conflict, this file wins.
+**Master reference for Claude Code and Cursor.** `AGENTS.md` is a symlink to this file — edit `CLAUDE.md` only. When tooling conflicts, this file wins.
 
 ---
 
@@ -158,12 +158,14 @@ Maps semantic tokens to Tailwind utility classes.
 
 ## Import Policy
 
-- **Direct source imports only.** No runtime barrel imports.
+- **Direct source imports only.** No runtime barrel imports (see `bundle-barrel-imports` in Vercel React best practices).
   - ✅ `import { paletteStore } from '@/store/palette/stores'`
   - ❌ `import { paletteStore } from '@/store/palette'`
 - **Type-only barrels are allowed:** `import type { Palette } from '@/shared/types'`
-- **`components/ui/` is flat.** No subdirectories inside `components/ui/`.
-- **`@/` resolves to the project root** (not `src/`).
+- **`components/ui/` is flat** — no subdirectories. **File names are kebab-case** (`button.tsx`, `dropdown-menu.tsx`), matching neutral-system / portfolio conventions.
+- **Buttons:** always `import { Button } from '@/components/ui/button'` (`@base-ui/react` primitive). Do not add a second app `Button` in feature components.
+- **Legacy form primitives** (`Input`, `Select`, `TextArea`, `ControlGroup`) live in `components/Inputs.tsx` until migrated into `components/ui/`.
+- **`@/` resolves to the project root** (not `src/`). Active code lives at repo root; exclude retired `src/` from tooling if it reappears.
 
 ---
 
@@ -305,3 +307,40 @@ These are planned and approved. Do not treat them as out-of-scope:
 - **Improved contrast tooling** — color blindness simulation, additional accessibility badges
 - **Preset browser** — expanded built-in palettes with browseable UI
 - **UI polish** — typography, spacing, component refinement, better responsive experience
+
+---
+
+## Cursor Composer Guidelines
+
+This project is actively worked on in Cursor Composer, primarily for UI changes.
+
+### Tailwind v4 in Cursor
+
+- All utility classes use canonical CSS variable syntax — `bg-surface-default`, not `bg-[var(--color-surface-default)]`
+- Color tokens live in `app/globals.css` under `@theme inline`. Do not inline color values in components.
+- When adding a new UI element, reference existing token names from `globals.css` — don't invent new ones.
+
+### Component work
+
+- Prefer editing existing components over creating new files. New files require a clear reason.
+- `components/ui/` is flat — no subdirectories. New headless primitives use **kebab-case** filenames.
+- Use `@base-ui/react` for interactive primitives (dialogs, popovers, toggles). Do not add Radix UI or Headless UI.
+
+### State in UI components
+
+- Read state via `useStore()` from `@nanostores/react`. Do not use React context for palette state.
+- Dispatch mutations through `store/palette/actions.ts`. Do not mutate store atoms directly in components.
+
+### When to ask before acting
+
+- Any change that touches `app/globals.css` token definitions
+- Any change to the 6 graph components or their canvas workers
+- Any new dependency (`pnpm add`)
+- Any change to the store shape or persistence key
+
+### When to act without asking
+
+- Styling changes within existing Tailwind token vocabulary
+- Adding a new display-only component that reads but doesn't write state
+- Fixing TypeScript errors or lint warnings
+- Copy/label changes

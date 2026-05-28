@@ -5,21 +5,25 @@ import { useStore } from '@nanostores/react'
 import { selectedStore } from '@/store/currentPosition'
 import { paletteStore } from '@/store/palette'
 import { valid } from '@/shared/color'
-import { Input } from '../inputs'
+import { Input } from '../Inputs'
 import { ContrastBadgeAPCA, ContrastBadgeWCAG, ContrastBadgeDeltaE } from './ContrastBadge'
 
 export const ColorInfo: FC = () => {
   const { tones } = useStore(paletteStore)
   return (
-    <div className="flex flex-col gap-4">
-      <ContrastGroup versusColor={tones[0]} />
-      <ContrastGroup versusColor={'white'} />
-      <ContrastGroup versusColor={'black'} />
+    <div
+      id="color-info"
+      data-slot="color-info"
+      className="flex flex-col gap-4"
+    >
+      <ContrastGroup versusColor={tones[0]} versusKey="palette-tone" />
+      <ContrastGroup versusColor="white" versusKey="white" />
+      <ContrastGroup versusColor="black" versusKey="black" />
     </div>
   )
 }
 
-const ContrastGroup: FC<{ versusColor: string }> = props => {
+const ContrastGroup: FC<{ versusColor: string; versusKey: string }> = props => {
   const { color, hueId, toneId } = useStore(selectedStore)
   const { colors, tones, hues } = useStore(paletteStore)
   const hex = color.hex
@@ -36,8 +40,16 @@ const ContrastGroup: FC<{ versusColor: string }> = props => {
     }
   }, [colorInput, colors, hueId, tones])
   return (
-    <div className="grid grid-cols-3 max-[640px]:grid-cols-1 gap-2">
-      <div className="col-span-full pt-2 text-center">
+    <div
+      id={`contrast-comparison-${props.versusKey}`}
+      data-slot="contrast-comparison"
+      data-versus={props.versusKey}
+      className="grid grid-cols-3 max-[640px]:grid-cols-1 gap-2"
+    >
+      <div
+        className="col-span-full pt-2 text-center"
+        data-slot="contrast-comparison-header"
+      >
         <h4>
           {name} vs.{' '}
           <Input
@@ -49,8 +61,16 @@ const ContrastGroup: FC<{ versusColor: string }> = props => {
           />
         </h4>
       </div>
-      <ContrastBadgeAPCA background={additionalColor} color={hex} />
-      <ContrastBadgeAPCA background={hex} color={additionalColor} />
+      <ContrastBadgeAPCA
+        background={additionalColor}
+        color={hex}
+        polarity="versus-on-selected"
+      />
+      <ContrastBadgeAPCA
+        background={hex}
+        color={additionalColor}
+        polarity="selected-on-versus"
+      />
       <ContrastBadgeWCAG background={additionalColor} color={hex} />
       <ContrastBadgeDeltaE background={additionalColor} color={hex} />
     </div>

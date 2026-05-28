@@ -16,7 +16,8 @@ import {
   renameTone,
 } from '@/store/palette'
 import { useKeyPress } from '@/shared/hooks/useKeyPress'
-import { Button, InvisibleInput } from './inputs'
+import { InvisibleInput } from './Inputs'
+import { Button } from '@/components/ui/button'
 import { useStore } from '@nanostores/react'
 import { colorSpaceStore, paletteStore, setPalette } from '@/store/palette'
 import { selectedStore, setSelected } from '@/store/currentPosition'
@@ -52,6 +53,8 @@ export const PaletteSwatches: FC = () => {
 
   return (
     <div
+      id="palette-swatches"
+      data-slot="palette-swatches"
       className="group grid"
       style={{
         gridTemplateColumns: `4rem repeat(${toneCount}, 3rem) 1.5rem`,
@@ -62,6 +65,8 @@ export const PaletteSwatches: FC = () => {
       {tones.map((toneName, tone) => (
         <InvisibleInput
           key={tone}
+          data-slot="palette-tone-label"
+          data-tone-id={tone}
           className="text-center"
           value={toneName}
           onChange={e => setPalette(renameTone(palette, tone, e.target.value))}
@@ -74,6 +79,8 @@ export const PaletteSwatches: FC = () => {
       {colors.map((hueColors, hueId) => (
         <Fragment key={hueId}>
           <InvisibleInput
+            data-slot="palette-hue-label"
+            data-hue-id={hueId}
             value={hues[hueId]}
             onChange={e =>
               setPalette(renameHue(palette, hueId, e.target.value))
@@ -85,7 +92,12 @@ export const PaletteSwatches: FC = () => {
             return (
               <button
                 key={toneId + '-' + hueId}
+                id={`palette-swatch-${hueId}-${toneId}`}
                 type="button"
+                data-slot="palette-swatch"
+                data-hue-id={hueId}
+                data-tone-id={toneId}
+                data-selected={isSelected ? 'true' : 'false'}
                 className="relative flex cursor-pointer items-center justify-center border-0 outline-none transition-transform duration-150 will-change-transform focus:outline-none"
                 onClick={() => setSelected([hueId, toneId])}
                 style={{

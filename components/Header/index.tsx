@@ -3,7 +3,9 @@
 import { useStore } from '@nanostores/react'
 import React from 'react'
 import { getPaletteLink, setColor, setPalette } from '@/store/palette'
-import { Button, ControlGroup, buttonClass } from '../inputs'
+import { ControlGroup } from '../Inputs'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { ThemeButton } from './ThemeButton'
 import { PaletteSelect } from './PaletteSelect'
 import { CopyButton } from '../CopyButton'
@@ -85,7 +87,7 @@ export function Header() {
 
         <ThemeButton />
         <a
-          className={buttonClass}
+          className={cn(buttonVariants())}
           href="https://github.com/ardov/huetone"
           title="Based on Huetone (upstream)"
           target="_blank"

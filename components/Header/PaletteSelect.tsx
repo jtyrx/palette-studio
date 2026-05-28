@@ -23,7 +23,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
-import { Button, ControlGroup, Input } from '../inputs'
+import { ControlGroup, Input } from '../Inputs'
+import { Button } from '@/components/ui/button'
 
 export const PaletteSelect = () => {
   const [renameState, setRenameState] = useState(false)

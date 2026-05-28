@@ -1,19 +1,26 @@
-import { Palette, spaceName } from '@/shared/types'
+import { Palette } from '@/shared/types'
 import { computed, map, onMount } from 'nanostores'
 import { colorSpaces } from '@/shared/colorFuncs'
-import { parseHexPalette } from '.'
 import { persistentAtom } from '@nanostores/persistent'
 import { PRESETS } from '@/shared/presets'
 import { HexPalette } from '@/shared/types'
 import { PALETTE_KEY } from '@/shared/constants'
 import { atom } from 'nanostores'
 import { isEqual } from 'lodash'
+import { exportToHexPalette, normalizeHexPalette } from './converters'
+import { hydratePaletteFromList } from './hydrate'
 import {
   decodeUserPalettes,
   getUrlPalette,
   scheduleCleanURL,
   initialPalette,
 } from './utils'
+
+function cloneHexPalette(palette: HexPalette): HexPalette {
+  return normalizeHexPalette(
+    JSON.parse(JSON.stringify(palette)) as HexPalette
+  )
+}
 const presets = PRESETS.map(p => ({ ...p, isPreset: true }))
 
 // —————————————————————————————————————————————————————————————————————————————
@@ -50,6 +57,7 @@ onMount(paletteListStore, () => {
   } else {
     savedPalettesStore.set([urlPalette, ...savedPalettesStore.get()])
   }
+  hydratePaletteFromList()
 })
 
 // —————————————————————————————————————————————————————————————————————————————
@@ -57,11 +65,26 @@ onMount(paletteListStore, () => {
 
 export const paletteStore = map<Palette>(initialPalette)
 
+/** Hex snapshot when the current palette was loaded; used by reset. */
+export const paletteBaselineStore = atom<HexPalette | null>(null)
+
+export const isPaletteDirtyStore = computed(
+  [paletteStore, paletteBaselineStore],
+  (palette, baseline) => {
+    if (!baseline) return false
+    return !isEqual(
+      normalizeHexPalette(exportToHexPalette(palette)),
+      normalizeHexPalette(baseline)
+    )
+  }
+)
+
+export function setPaletteBaseline(hex: HexPalette) {
+  paletteBaselineStore.set(cloneHexPalette(hex))
+}
+
 onMount(paletteStore, () => {
-  if (typeof window === 'undefined') return
-  const list = paletteListStore.get()
-  const idx = paletteIdStore.get()
-  paletteStore.set(parseHexPalette(list[idx], spaceName.oklch))
+  queueMicrotask(() => hydratePaletteFromList())
 })
 
 export const colorSpaceStore = computed(

@@ -10,21 +10,25 @@ import { Canvas } from './Chart/Canvas'
 import { clamp } from '@/shared/utils'
 import { useElementSize } from '@/shared/hooks/useElementSize'
 
-type ScaleProps = {
+type ChartAxis = 'stop' | 'hue'
+
+export type ColorGraphScaleProps = {
   colors: TColor[]
   selected: number
   channel: Channel
+  axis: ChartAxis
   onSelect: (idx: number) => void
   onColorChange: (idx: number, lch: LCH) => void
 }
 
-export function Scale({
+export function ColorGraphScale({
   colors,
   selected,
   channel = 'l',
+  axis,
   onSelect,
   onColorChange,
-}: ScaleProps) {
+}: ColorGraphScaleProps) {
   const { showColors } = useStore(chartSettingsStore)
   const { ranges } = useStore(colorSpaceStore)
   const { ref: chartRef, size } = useElementSize<HTMLDivElement>()
@@ -41,14 +45,27 @@ export function Scale({
 
   const chartReady = size.width > 0 && size.height > 0
 
+  const chartId = `color-chart-${channel}-${axis}`
+
   return (
-    <div className="color-graph-scale">
-      <div className="flex overflow-hidden rounded-t-lg">
+    <div
+      id={chartId}
+      data-slot="color-chart"
+      data-channel={channel}
+      data-axis={axis}
+      className="color-graph-scale"
+    >
+      <div
+        className="flex overflow-hidden rounded-t-lg"
+        data-slot="color-chart-values"
+      >
         {colors.map((color, i) => {
           const contrasting = getMostContrast(color.hex, ['black', 'white'])
           return (
             <input
               key={i}
+              data-slot="color-chart-value-input"
+              data-index={i}
               className="graph-value-input"
               type="number"
               title={color[channel].toFixed(ranges[channel].precision)}
@@ -88,12 +105,18 @@ export function Scale({
           )
         })}
       </div>
-      <div ref={chartRef} className="color-graph-chart">
+      <div
+        ref={chartRef}
+        className="color-graph-chart"
+        data-slot="color-chart-plot"
+        id={`${chartId}-plot`}
+      >
         {chartReady && (
           <Canvas
             width={size.width}
             height={size.height}
             channel={channel}
+            axis={axis}
             colors={colors}
           />
         )}
@@ -106,6 +129,8 @@ export function Scale({
               key={i}
               type="range"
               className="graph-knob"
+              data-slot="color-chart-knob"
+              data-index={i}
               data-selected={i === selected ? 'true' : 'false'}
               min={ranges[channel].min}
               max={ranges[channel].max}

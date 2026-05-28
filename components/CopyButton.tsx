@@ -2,7 +2,7 @@
 
 import React, { FC, useEffect, useState } from 'react'
 import type { ComponentProps } from 'react'
-import { Button } from './inputs'
+import { Button } from '@/components/ui/button'
 
 type CopyButtonProps = {
   getContent: () => string

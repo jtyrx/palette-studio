@@ -1,23 +1,46 @@
 import { HexPalette, LCH, Palette, spaceName } from '@/shared/types'
 import { convertToMode } from './paletteReducers'
-import { paletteStore, paletteIdStore, paletteListStore } from './stores'
+import {
+  paletteBaselineStore,
+  paletteStore,
+  paletteIdStore,
+  paletteListStore,
+  setPaletteBaseline,
+} from './stores'
 import {
   clampColorsToRgb,
   setHueHue,
   setToneLuminance,
 } from './paletteReducers'
-import { parseHexPalette } from './converters'
+import { exportToHexPalette, normalizeHexPalette, parseHexPalette } from './converters'
+import { hydratePaletteFromList, runWithoutHydrate } from './hydrate'
 import { selectedStore } from '../currentPosition'
-import { colorSpaceStore, exportToHexPalette, savedPalettesStore } from '.'
+import { colorSpaceStore, savedPalettesStore } from '.'
 
 export const switchPalette = (id: number) => {
   if (id === paletteIdStore.get()) return
   const paletteList = paletteListStore.get()
   if (!paletteList[id]) return
   paletteIdStore.set(id)
+  hydratePaletteFromList()
+}
+
+/** Restore all swatch/token values to the snapshot for the active palette. */
+export function resetPaletteToBaseline() {
+  const baseline = paletteBaselineStore.get()
+  if (!baseline) return
+
   const { mode } = paletteStore.get()
-  const newPalette = parseHexPalette(paletteList[id], mode)
-  paletteStore.set(newPalette)
+  const restored = parseHexPalette(normalizeHexPalette(baseline), mode)
+  const currentId = paletteIdStore.get()
+  const savedCount = savedPalettesStore.get().length
+
+  runWithoutHydrate(() => {
+    paletteStore.set(restored)
+    if (currentId < savedCount) {
+      updateSavedPalette(exportToHexPalette(restored), currentId)
+    }
+  })
 }
 
 export function switchColorSpace(space: spaceName) {

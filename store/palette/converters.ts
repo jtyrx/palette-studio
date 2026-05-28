@@ -98,6 +98,18 @@ export function exportToHexPalette(palette: Palette): HexPalette {
   }
 }
 
+/** Stable hex snapshot for compare / reset (drops preset-only fields). */
+export function normalizeHexPalette(palette: HexPalette): HexPalette {
+  return {
+    name: palette.name,
+    tones: [...palette.tones],
+    hues: palette.hues.map(hue => ({
+      name: hue.name,
+      colors: [...hue.colors],
+    })),
+  }
+}
+
 /** Convert local palette to design tokens format
  *  @param palette
  */

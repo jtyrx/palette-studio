@@ -1,22 +1,8 @@
 import * as React from 'react'
 
-/** Shared primary control surface (buttons, icon links). */
-export const buttonClass =
+/** Shared surface for native `<select>` controls (not the shadcn/base-ui Button). */
+const controlSurfaceClass =
   'inline-flex cursor-pointer items-center justify-center gap-2 rounded-(--radius-m) border-0 bg-(--color-interactive-bg) px-2 py-1.5 text-sm leading-5 text-(--color-text-secondary) transition-[color,background-color,transform] duration-100 ease-out hover:bg-(--color-interactive-bg-hover) hover:text-(--color-text-primary) active:translate-y-px active:bg-(--color-interactive-bg-active) focus:outline-none focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-[3px] focus-visible:outline-(--color-text-primary)'
-
-export const Button = React.forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->(function Button({ className, type = 'button', ...props }, ref) {
-  return (
-    <button
-      ref={ref}
-      type={type}
-      className={[buttonClass, className].filter(Boolean).join(' ')}
-      {...props}
-    />
-  )
-})
 
 export const Select = React.forwardRef<
   HTMLSelectElement,
@@ -26,7 +12,7 @@ export const Select = React.forwardRef<
     <select
       ref={ref}
       className={[
-        buttonClass,
+        controlSurfaceClass,
         'active:translate-y-0 [&>option]:bg-(--color-surface-card) [&>option]:text-(--color-text-primary)',
         className,
       ]

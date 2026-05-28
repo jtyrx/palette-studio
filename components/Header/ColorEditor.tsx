@@ -2,7 +2,7 @@
 
 import React, { FC, useEffect, useState } from 'react'
 import { Channel, TColor } from '@/shared/types'
-import { ControlGroup, Input } from '../inputs'
+import { ControlGroup, Input } from '../Inputs'
 import { useStore } from '@nanostores/react'
 import { colorSpaceStore } from '@/store/palette'
 import { clamp } from '@/shared/utils'

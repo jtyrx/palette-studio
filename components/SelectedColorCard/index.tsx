@@ -32,7 +32,10 @@ function ValueRow({
   }, [value])
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-1">
+    <div
+      className="flex min-h-0 flex-1 flex-col gap-1"
+      data-slot={`selected-color-value-${label.toLowerCase()}`}
+    >
       <button
         type="button"
         onClick={onCopy}
@@ -71,6 +74,7 @@ function Swatch({
 
   return (
     <div
+      data-slot={`selected-color-swatch-${gamut}`}
       className="relative min-h-20 w-full flex-1 overflow-hidden rounded-(--radius-m) ring-1 ring-(--color-border-subtle)"
       style={style}
       data-color-gamut={gamut}
@@ -90,10 +94,15 @@ export function SelectedColorCard() {
 
   return (
     <section
+      id="selected-color-card"
+      data-slot="selected-color-card"
       className="grid grid-cols-2 gap-3"
       aria-label={`Selected color ${swatchName}`}
     >
-      <div className="flex min-h-44 flex-col gap-3">
+      <div
+        className="flex min-h-44 flex-col gap-3"
+        data-slot="selected-color-swatches"
+      >
         <Swatch label="P3" gamut="p3" background={display.p3Background} />
         <Swatch
           label="Fallback"
@@ -102,7 +111,10 @@ export function SelectedColorCard() {
         />
       </div>
 
-      <div className="flex min-h-44 flex-col gap-3">
+      <div
+        className="flex min-h-44 flex-col gap-3"
+        data-slot="selected-color-values"
+      >
         <ValueRow label="O" value={display.oklch} />
         <ValueRow
           label="R"

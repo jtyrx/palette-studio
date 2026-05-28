@@ -42,6 +42,7 @@ export function Canvas(props: {
   width: number
   height: number
   channel: Channel
+  axis: 'stop' | 'hue'
   colors: TColor[]
   renderStrategy?: RenderStrategyType
 }) {
@@ -51,6 +52,7 @@ export function Canvas(props: {
     width: cssWidth,
     height: cssHeight,
     channel,
+    axis,
     colors,
     renderStrategy = 'concurrent',
   } = props
@@ -118,6 +120,9 @@ export function Canvas(props: {
 
   return (
     <div
+      data-slot="color-chart-canvas"
+      data-channel={channel}
+      data-axis={axis}
       className="overflow-hidden rounded-b-lg"
       style={{
         backgroundColor: 'var(--color-canvas-2)',
@@ -129,6 +134,9 @@ export function Canvas(props: {
     >
       <canvas
         ref={canvasRef}
+        data-slot="color-chart-canvas-element"
+        data-channel={channel}
+        data-axis={axis}
         width={bufferWidth}
         height={bufferHeight}
         className="drop-shadow-[0_0_0.0714rem_var(--color-canvas-1)]"

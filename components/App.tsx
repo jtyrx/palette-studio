@@ -2,10 +2,11 @@
 
 import { useStore } from '@nanostores/react'
 import React, { FC, useMemo } from 'react'
-import { Scale } from './ColorGraph'
+import { ColorGraphScale } from './ColorGraph'
 import { PaletteSwatches } from './PaletteSwatches'
+import { PaletteResetButton } from './PaletteResetButton'
 import { setLchColor } from '@/store/palette'
-import { ExportField } from './Export'
+import { ExportField } from './ExportField'
 import { ColorInfo } from './ColorInfo'
 import { Help } from './Help'
 import { KeyPressHandler } from './KeyPressHandler'
@@ -25,13 +26,23 @@ export default function App() {
   )
 
   return (
-    <div className="flex flex-1 flex-col min-h-0">
+    <div className="flex flex-1 flex-col min-h-0" data-slot="workbench">
       <Header />
-      <main className="flex min-h-0 flex-1 max-[860px]:flex-col">
+      <main className="flex min-h-0 flex-1 max-[860px]:flex-col" data-slot="workbench-main">
         <KeyPressHandler />
-        <section className="flex w-min min-w-(--layout-panel-min) flex-col gap-4 overflow-auto p-4 max-[860px]:w-full max-[860px]:min-w-0">
-          <div className="overflow-x-auto">
-            <PaletteSwatches />
+        <section
+          id="palette-panel"
+          data-slot="palette-panel"
+          className="flex w-min min-w-(--layout-panel-min) flex-col gap-4 overflow-auto p-4 max-[860px]:w-full max-[860px]:min-w-0"
+        >
+          <div
+            className="flex flex-col gap-2"
+            data-slot="palette-swatches-scroll"
+          >
+            <div className="overflow-x-auto">
+              <PaletteSwatches />
+            </div>
+            <PaletteResetButton />
           </div>
           <ColorInfo />
           <div className="flex flex-wrap gap-2">
@@ -39,10 +50,19 @@ export default function App() {
           </div>
         </section>
 
-        <section className="bg-(--color-surface-card) flex flex-1 flex-col gap-4 overflow-auto px-6 py-4">
+        <section
+          id="charts-panel"
+          data-slot="charts-panel"
+          className="bg-(--color-surface-card) flex flex-1 flex-col gap-4 overflow-auto px-6 py-4"
+        >
           <SelectedColorCard />
-          <section className="color-graph-grid">
-            <Scale
+          <section
+            id="color-graph-grid"
+            data-slot="color-graph-grid"
+            className="color-graph-grid"
+          >
+            <ColorGraphScale
+              axis="stop"
               selected={selected.toneId}
               channel="l"
               colors={palette.colors[selected.hueId]}
@@ -52,8 +72,9 @@ export default function App() {
                 setLchColor(lch, selected.hueId, i)
               }}
             />
-            <ScaleIndicator axis="l" />
-            <Scale
+            <ColorGraphAxisIndicator axis="l" />
+            <ColorGraphScale
+              axis="hue"
               selected={selected.hueId}
               channel="l"
               colors={hueColors}
@@ -64,7 +85,8 @@ export default function App() {
               }}
             />
 
-            <Scale
+            <ColorGraphScale
+              axis="stop"
               selected={selected.toneId}
               channel="c"
               colors={palette.colors[selected.hueId]}
@@ -74,8 +96,9 @@ export default function App() {
                 setLchColor(lch, selected.hueId, i)
               }}
             />
-            <ScaleIndicator axis="c" />
-            <Scale
+            <ColorGraphAxisIndicator axis="c" />
+            <ColorGraphScale
+              axis="hue"
               selected={selected.hueId}
               channel="c"
               colors={hueColors}
@@ -86,7 +109,8 @@ export default function App() {
               }}
             />
 
-            <Scale
+            <ColorGraphScale
+              axis="stop"
               selected={selected.toneId}
               channel="h"
               colors={palette.colors[selected.hueId]}
@@ -96,8 +120,9 @@ export default function App() {
                 setLchColor(lch, selected.hueId, i)
               }}
             />
-            <ScaleIndicator axis="h" />
-            <Scale
+            <ColorGraphAxisIndicator axis="h" />
+            <ColorGraphScale
+              axis="hue"
               selected={selected.hueId}
               channel="h"
               colors={hueColors}
@@ -117,10 +142,15 @@ export default function App() {
   )
 }
 
-const ScaleIndicator: FC<{ axis: 'l' | 'c' | 'h' }> = ({ axis }) => {
+const ColorGraphAxisIndicator: FC<{ axis: 'l' | 'c' | 'h' }> = ({ axis }) => {
   const pressed = useKeyPress('Key' + axis.toUpperCase())
   return (
-    <div className="color-graph-axis grid grid-rows-[1.625rem_auto]">
+    <div
+      className="color-graph-axis grid grid-rows-[1.625rem_auto]"
+      data-slot="color-chart-axis-indicator"
+      data-channel={axis}
+      id={`color-chart-axis-${axis}`}
+    >
       <span className="relative inline-block">
         <span
           className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 w-6 rounded-(--radius-m) text-center text-(--color-text-primary) leading-6"

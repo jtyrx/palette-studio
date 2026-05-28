@@ -1,6 +1,6 @@
 import React, { FC, SVGProps } from 'react'
 
-export const MoonIcon: FC<SVGProps<SVGSVGElement>> = props => (
+export const Moon: FC<SVGProps<SVGSVGElement>> = props => (
   <svg
     width="20"
     height="20"
