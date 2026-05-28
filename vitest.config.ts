@@ -4,11 +4,12 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   test: {
     environment: 'node',
-    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    include: ['**/*.{test,spec}.{ts,tsx}'],
+    exclude: ['node_modules', '.next', 'build'],
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(__dirname, '.'),
     },
   },
 })
