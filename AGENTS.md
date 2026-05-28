@@ -1,6 +1,8 @@
 # Palette Studio — Agent Instructions
 
-This file is the source of truth for all AI agents (Claude Code, Cursor, Copilot, etc.) working in this repository. Read it before touching any file.
+This file is kept in sync with **CLAUDE.md**, which is the master reference. If the two files conflict, CLAUDE.md wins. This file adds Cursor Composer–specific guidance on top of the shared spec.
+
+Read this file before touching any file.
 
 ---
 
@@ -8,7 +10,7 @@ This file is the source of truth for all AI agents (Claude Code, Cursor, Copilot
 
 | Layer | Technology |
 |---|---|
-| Framework | Next.js 16 · App Router · Turbopack |
+| Framework | Next.js 16.x · App Router · Turbopack |
 | Language | TypeScript 5 · strict mode |
 | Styling | Tailwind CSS v4 · CSS-first (`@theme`, `@utility`, no `tailwind.config.*`) |
 | UI primitives | `@base-ui/react` · shadcn-style wrappers in `components/ui/` |
@@ -16,7 +18,7 @@ This file is the source of truth for all AI agents (Claude Code, Cursor, Copilot
 | Color math | `colorjs.io` (primary) + `chroma-js` (WCAG 2.1 ratio only) |
 | Contrast | `apca-w3` for APCA · `chroma.contrast` for WCAG 2.1 |
 | Theme | `next-themes` · `attribute="data-theme"` · default `"dark"` |
-| Persistence | `@nanostores/persistent` (localStorage key: `colorWorkbench_v1`) · lz-string URL share (read-once, cleaned) |
+| Persistence | `@nanostores/persistent` (localStorage key: `palette`) · lz-string URL share (read-once, cleaned) |
 | Package manager | `pnpm` |
 | Testing | `vitest` + `@testing-library/react` |
 | Icons | `lucide-react` |
@@ -44,8 +46,7 @@ layout.tsx
   ThemeProvider (next-themes, data-theme attribute)
     PaletteStudioLoader
       PaletteStudioClient  ← 'use client' boundary
-        ColorWorkbenchProvider
-          App
+        App
             Header
               PaletteSelect
               ColorEditor
@@ -88,11 +89,6 @@ shared/
   types.ts              — TColor, Palette, HexPalette, TLchModel
   presets.ts            — built-in palette presets
   constants.ts          — PALETTE_KEY and other shared constants
-```
-
-### hooks/
-```
-hooks/useColorWorkbench.ts   — stable hook wrapping nanostores palette state
 ```
 
 ### The 6 graphs
@@ -255,8 +251,51 @@ Do not implement without explicit approval:
 
 | Key | Store | Format |
 |---|---|---|
-| `colorWorkbench_v1` | `savedPalettesStore` | JSON array of `HexPalette` |
+| `palette` | `savedPalettesStore` | JSON array of `HexPalette` |
 | `theme` | next-themes | `'light'` or `'dark'` |
 | `p` (URL query param) | lz-string URL share | Compressed JSON, read-once on mount |
 
 Schema-version the localStorage key (`_v1`, `_v2`) whenever the `HexPalette` shape changes.
+
+---
+
+## Upcoming Features (In Scope — Do Not Block)
+
+These are planned and approved. Do not treat them as out-of-scope:
+
+- **Export / copy outputs** — CSS custom properties, Tailwind token JSON, raw hex/oklch formats
+- **Improved contrast tooling** — color blindness simulation, additional accessibility badges
+- **Preset browser** — expanded built-in palettes with browseable UI
+- **UI polish** — typography, spacing, component refinement, better responsive experience
+
+---
+
+## Cursor Composer Guidelines
+
+This project is actively worked on in Cursor Composer 2.5, primarily for UI changes.
+
+### Tailwind v4 in Cursor
+- All utility classes use canonical CSS variable syntax — `bg-surface-default`, not `bg-[var(--color-surface-default)]`
+- Color tokens live in `app/globals.css` under `@theme inline`. Do not inline color values in components.
+- When adding a new UI element, reference existing token names from globals.css — don't invent new ones.
+
+### Component work
+- Prefer editing existing components over creating new files. New files require a clear reason.
+- `components/ui/` is flat — no subdirectories. New headless primitives go here.
+- Use `@base-ui/react` for interactive primitives (dialogs, popovers, toggles). Do not add Radix UI or Headless UI.
+
+### State in UI components
+- Read state via `useStore()` from `@nanostores/react`. Do not use React context for palette state.
+- Dispatch mutations through `store/palette/actions.ts`. Do not mutate store atoms directly in components.
+
+### When to ask before acting
+- Any change that touches `app/globals.css` token definitions
+- Any change to the 6 graph components or their canvas workers
+- Any new dependency (`pnpm add`)
+- Any change to the store shape or persistence key
+
+### When to act without asking
+- Styling changes within existing Tailwind token vocabulary
+- Adding a new display-only component that reads but doesn't write state
+- Fixing TypeScript errors or lint warnings
+- Copy/label changes
