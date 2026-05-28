@@ -5,25 +5,42 @@ import { useStore } from '@nanostores/react'
 import { selectedStore } from '@/store/currentPosition'
 import { paletteStore } from '@/store/palette'
 import { valid } from '@/shared/color'
-import { Input } from '../Inputs'
+import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 import { ContrastBadgeAPCA, ContrastBadgeWCAG, ContrastBadgeDeltaE } from './ContrastBadge'
 
-export const ColorInfo: FC = () => {
+type ColorInfoVariant = 'default' | 'sidebar'
+
+export const ColorInfo: FC<{ variant?: ColorInfoVariant }> = ({
+  variant = 'default',
+}) => {
   const { tones } = useStore(paletteStore)
+  const isSidebar = variant === 'sidebar'
+
   return (
     <div
       id="color-info"
       data-slot="color-info"
-      className="flex flex-col gap-4"
+      data-variant={variant}
+      className={cn('flex flex-col', isSidebar ? 'gap-7' : 'gap-4')}
     >
-      <ContrastGroup versusColor={tones[0]} versusKey="palette-tone" />
-      <ContrastGroup versusColor="white" versusKey="white" />
-      <ContrastGroup versusColor="black" versusKey="black" />
+      <ContrastGroup
+        variant={variant}
+        versusColor={tones[0]}
+        versusKey="palette-tone"
+      />
+      <ContrastGroup variant={variant} versusColor="white" versusKey="white" />
+      <ContrastGroup variant={variant} versusColor="black" versusKey="black" />
     </div>
   )
 }
 
-const ContrastGroup: FC<{ versusColor: string; versusKey: string }> = props => {
+const ContrastGroup: FC<{
+  versusColor: string
+  versusKey: string
+  variant?: ColorInfoVariant
+}> = (props) => {
+  const isSidebar = props.variant === 'sidebar'
   const { color, hueId, toneId } = useStore(selectedStore)
   const { colors, tones, hues } = useStore(paletteStore)
   const hex = color.hex
@@ -44,19 +61,33 @@ const ContrastGroup: FC<{ versusColor: string; versusKey: string }> = props => {
       id={`contrast-comparison-${props.versusKey}`}
       data-slot="contrast-comparison"
       data-versus={props.versusKey}
-      className="grid grid-cols-3 max-[640px]:grid-cols-1 gap-2"
+      className={cn(
+        'grid gap-2',
+        isSidebar
+          ? 'grid-cols-1'
+          : 'grid-cols-3 max-[640px]:grid-cols-1',
+      )}
     >
       <div
-        className="col-span-full pt-2 text-center"
+        className={cn(
+          'col-span-full',
+          isSidebar ? 'pb-0.5 text-left' : 'pt-2 text-center',
+        )}
         data-slot="contrast-comparison-header"
       >
-        <h4>
-          {name} vs.{' '}
+        <h4
+          className={cn(
+            'flex flex-wrap gap-2 text-sm font-medium text-default',
+            isSidebar ? 'items-baseline justify-start' : 'items-center justify-center',
+          )}
+        >
+          <span>{name} vs.</span>
           <Input
+            variant="workbench"
+            className="inline-flex h-8 w-auto min-w-16 max-w-full"
             value={colorInput}
             onChange={e => {
-              const value = e.target.value
-              setColorInput(value)
+              setColorInput(e.target.value)
             }}
           />
         </h4>

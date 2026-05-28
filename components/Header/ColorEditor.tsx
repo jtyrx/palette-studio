@@ -2,10 +2,12 @@
 
 import React, { FC, useEffect, useState } from 'react'
 import { Channel, TColor } from '@/shared/types'
-import { ControlGroup, Input } from '../Inputs'
+import { ButtonGroup } from '@/components/ui/button-group'
+import { Input } from '@/components/ui/input'
 import { useStore } from '@nanostores/react'
 import { colorSpaceStore } from '@/store/palette'
 import { clamp } from '@/shared/utils'
+import { cn } from '@/lib/utils'
 
 type ColorEditorProps = {
   color: TColor
@@ -29,16 +31,20 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
     if (channel === 'h') onChange(lch2color([l, c, value]))
   }
 
-  const channelNumClass =
-    'channel-input [-moz-appearance:textfield] h-full w-20 py-[0.3125rem] pl-6 pr-2 text-sm leading-5 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none'
+  const channelNumClass = cn(
+    'channel-input h-8 w-20 border-0 bg-transparent py-0 pl-6 pr-2 text-sm',
+    '[-moz-appearance:textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none',
+    '[&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none'
+  )
 
   return (
-    <ControlGroup>
-      <label className="relative isolate">
-        <span className="-translate-y-1/2 absolute top-1/2 left-0 py-1 pl-2 text-(--color-text-hint)">
+    <ButtonGroup orientation="horizontal" className="max-w-full overflow-x-auto">
+      <label className="relative isolate flex shrink-0">
+        <span className="pointer-events-none absolute top-1/2 left-2 z-10 -translate-y-1/2 text-xs text-muted-foreground">
           L
         </span>
         <Input
+          variant="workbench"
           className={channelNumClass}
           type="number"
           min={ranges.l.min}
@@ -48,11 +54,12 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
           onChange={e => setColor('l', +e.target.value)}
         />
       </label>
-      <label className="relative isolate">
-        <span className="-translate-y-1/2 absolute top-1/2 left-0 py-1 pl-2 text-(--color-text-hint)">
+      <label className="relative isolate flex shrink-0">
+        <span className="pointer-events-none absolute top-1/2 left-2 z-10 -translate-y-1/2 text-xs text-muted-foreground">
           C
         </span>
         <Input
+          variant="workbench"
           className={channelNumClass}
           type="number"
           min={ranges.c.min}
@@ -62,11 +69,12 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
           onChange={e => setColor('c', +e.target.value)}
         />
       </label>
-      <label className="relative isolate">
-        <span className="-translate-y-1/2 absolute top-1/2 left-0 py-1 pl-2 text-(--color-text-hint)">
+      <label className="relative isolate flex shrink-0">
+        <span className="pointer-events-none absolute top-1/2 left-2 z-10 -translate-y-1/2 text-xs text-muted-foreground">
           H
         </span>
         <Input
+          variant="workbench"
           className={channelNumClass}
           type="number"
           min={ranges.h.min}
@@ -77,9 +85,10 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
         />
       </label>
       <Input
-        className="w-20"
+        variant="workbench"
+        className="h-8 w-24 shrink-0"
         value={colorInput}
-        style={{ color: within_sRGB ? 'inherit' : 'red' }}
+        style={{ color: within_sRGB ? undefined : 'var(--color-text-error)' }}
         onFocus={() => setIsFocused(true)}
         onBlur={() => {
           setIsFocused(false)
@@ -92,6 +101,6 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
           if (parsed) onChange(parsed)
         }}
       />
-    </ControlGroup>
+    </ButtonGroup>
   )
 }

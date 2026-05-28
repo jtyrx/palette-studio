@@ -10,6 +10,8 @@ export function PaletteResetButton() {
   return (
     <Button
       type="button"
+      variant="outline"
+      size="sm"
       data-slot="palette-reset"
       disabled={!dirty}
       onClick={() => resetPaletteToBaseline()}
@@ -18,7 +20,7 @@ export function PaletteResetButton() {
           ? 'Restore all swatch colors to when this palette was selected'
           : 'No changes to reset'
       }
-      className="w-full border border-(--color-border-subtle) bg-transparent px-2 py-1.5 text-xs font-normal text-(--color-text-hint) hover:bg-(--color-interactive-bg) hover:text-(--color-text-secondary) disabled:pointer-events-none disabled:opacity-40"
+      className="w-full font-normal"
     >
       Reset palette
     </Button>

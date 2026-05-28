@@ -7,7 +7,7 @@ import {
   parseHexPalette,
 } from '@/store/palette'
 import { paletteStore, setPalette } from '@/store/palette'
-import { TextArea } from './Inputs'
+import { cn } from '@/lib/utils'
 
 export const ExportField: FC = () => {
   const palette = useStore(paletteStore)
@@ -22,9 +22,9 @@ export const ExportField: FC = () => {
   }, [currentJSON])
 
   return (
-    <TextArea
+    <textarea
       ref={ref}
-      className="min-h-30 w-full resize-none"
+      className={cn('ns-input min-h-30 w-full resize-none font-mono text-xs')}
       onBlur={() => setAreaValue(currentJSON)}
       value={areaValue}
       onFocus={e => e.target.select()}

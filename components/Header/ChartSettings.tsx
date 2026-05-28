@@ -21,15 +21,18 @@ export const ChartSettings = () => {
   const nextMode = mode === 'cielch' ? 'OKLch' : 'CIELch'
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button title="Chart settings">
-            <Settings />
-          </Button>
-        }
-      />
+      <DropdownMenuTrigger asChild>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          title="Chart settings"
+        >
+          <Settings />
+        </Button>
+      </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="center" sideOffset={4}>
+      <DropdownMenuContent align="end" sideOffset={4}>
         <DropdownMenuItem onClick={toggleColorSpace}>
           Use {nextMode} color model
         </DropdownMenuItem>

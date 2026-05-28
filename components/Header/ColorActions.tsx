@@ -18,32 +18,35 @@ import {
 export const ColorActions = () => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button title="Actions">
-            <More />
-          </Button>
-        }
-      />
+      <DropdownMenuTrigger asChild>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          title="Actions"
+        >
+          <More />
+        </Button>
+      </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" sideOffset={4}>
         <DropdownMenuItem
           onClick={pushColorsIntoRgb}
           title="Not all LCH colors are displayable in RGB color space. This button will tweak all LCH values to be displayable."
         >
-          <span style={{ display: 'flex', gap: 8 }}>
+          <span className="flex items-center gap-2">
             <Minimize />
             Make colors displayable
           </span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={currentHueToRow}>
-          <span style={{ display: 'flex', gap: 8 }}>
+          <span className="flex items-center gap-2">
             <EqualizeH />
             Apply current hue to row
           </span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={currentLuminanceToColumn}>
-          <span style={{ display: 'flex', gap: 8 }}>
+          <span className="flex items-center gap-2">
             <EqualizeL />
             Apply current luminance to column
           </span>
