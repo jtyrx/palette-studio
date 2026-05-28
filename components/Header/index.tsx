@@ -41,7 +41,7 @@ export function Header() {
         <PaletteSelect />
         <CopyButton getContent={() => getPaletteLink(palette)}>
           <Link />
-          Copy link
+          <span className="max-[640px]:hidden">Copy link</span>
         </CopyButton>
       </div>
 

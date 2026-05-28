@@ -36,7 +36,7 @@ const ContrastGroup: FC<{ versusColor: string }> = props => {
     }
   }, [colorInput, colors, hueId, tones])
   return (
-    <div className="grid grid-cols-3 gap-2">
+    <div className="grid grid-cols-3 max-[640px]:grid-cols-1 gap-2">
       <div className="col-span-full pt-2 text-center">
         <h4>
           {name} vs.{' '}

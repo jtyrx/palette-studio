@@ -29,8 +29,10 @@ export default function App() {
       <Header />
       <main className="flex min-h-0 flex-1 max-[860px]:flex-col">
         <KeyPressHandler />
-        <section className="flex w-min min-w-[var(--layout-panel-min)] flex-col gap-4 overflow-auto p-4">
-          <PaletteSwatches />
+        <section className="flex w-min min-w-[var(--layout-panel-min)] flex-col gap-4 overflow-auto p-4 max-[860px]:w-full max-[860px]:min-w-0">
+          <div className="overflow-x-auto">
+            <PaletteSwatches />
+          </div>
           <ColorInfo />
           <div className="flex flex-wrap gap-2">
             <ExportField />
@@ -106,7 +108,9 @@ export default function App() {
               }}
             />
           </section>
-          <Help />
+          <div className="max-[860px]:hidden">
+            <Help />
+          </div>
         </section>
       </main>
     </div>
@@ -116,7 +120,7 @@ export default function App() {
 const ScaleIndicator: FC<{ axis: 'l' | 'c' | 'h' }> = ({ axis }) => {
   const pressed = useKeyPress('Key' + axis.toUpperCase())
   return (
-    <div className="grid grid-rows-[1.625rem_auto]">
+    <div className="color-graph-axis grid grid-rows-[1.625rem_auto]">
       <span className="relative inline-block">
         <span
           className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 w-6 rounded-[var(--radius-m)] text-center text-[var(--color-text-primary)] leading-6"
