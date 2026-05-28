@@ -38,7 +38,7 @@ export function Label({
   return (
     <DropdownMenuLabel
       className={cn(
-        'px-1.5 py-1.5 text-sm font-bold leading-5 text-[var(--c-text-primary)]',
+        'px-1.5 py-1.5 text-sm font-bold leading-5 text-[var(--color-text-primary)]',
         className
       )}
       {...props}
@@ -62,9 +62,9 @@ export function Item({
   return (
     <DropdownMenuItem
       className={cn(
-        'flex cursor-pointer justify-between gap-2 rounded-[var(--radius-m)] px-1.5 py-1.5 text-sm leading-5 text-[var(--c-text-primary)] outline-none transition-[background-color] duration-100 ease-out',
-        'hover:bg-[var(--c-btn-bg)] focus:bg-[var(--c-btn-bg)] active:bg-[var(--c-btn-bg-active)]',
-        selected && 'bg-[var(--c-btn-bg)]',
+        'flex cursor-pointer justify-between gap-2 rounded-[var(--radius-m)] px-1.5 py-1.5 text-sm leading-5 text-[var(--color-text-primary)] outline-none transition-[background-color] duration-100 ease-out',
+        'hover:bg-[var(--color-interactive-bg)] focus:bg-[var(--color-interactive-bg)] active:bg-[var(--color-interactive-bg-active)]',
+        selected && 'bg-[var(--color-interactive-bg)]',
         className
       )}
       onClick={event => {
@@ -83,7 +83,7 @@ export function Content({
   return (
     <DropdownMenuContent
       className={cn(
-        'z-[1000] max-h-[calc(100vh-64px)] min-w-0 w-auto rounded-[var(--radius-m)] bg-[var(--c-bg-card)] p-0.5 py-2 text-[var(--c-text-primary)] shadow-lg ring-0',
+        'z-[1000] max-h-[calc(100vh-64px)] min-w-0 w-auto rounded-[var(--radius-m)] bg-[var(--color-surface-card)] p-0.5 py-2 text-[var(--color-text-primary)] shadow-lg ring-0',
         className
       )}
       {...props}

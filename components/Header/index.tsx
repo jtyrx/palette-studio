@@ -36,7 +36,7 @@ export function Header() {
   const selected = useStore(selectedStore)
 
   return (
-    <header className="flex w-full flex-wrap items-start justify-between gap-2 border-b border-[var(--c-divider)] p-4">
+    <header className="flex w-full flex-wrap items-start justify-between gap-2 border-b border-[var(--color-border-subtle)] p-4">
       <div className="flex flex-wrap gap-2">
         <PaletteSelect />
         <CopyButton getContent={() => getPaletteLink(palette)}>

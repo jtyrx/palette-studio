@@ -19,7 +19,7 @@ const ExportsSection: FC = () => (
     <p className="mt-3 max-w-[60ch]">
       <strong>Figma.</strong> Install{' '}
       <a
-        className="text-inherit underline decoration-[var(--c-text-secondary)] hover:text-[var(--c-text-primary)] hover:no-underline"
+        className="text-inherit underline decoration-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:no-underline"
         href="https://www.figma.com/community/plugin/843461159747178978/Figma-Tokens"
       >
         Figma Tokens
@@ -77,12 +77,12 @@ const HotkeysSection = () => {
         </li>
         <li>
           <Key>{metaKeyLabel()}</Key> + <Key>⇧</Key> + <Key>C</Key> — copy selected color in{' '}
-          <code className="rounded-[var(--radius-m)] border border-[var(--c-divider)] px-[3px] font-mono">
+          <code className="rounded-[var(--radius-m)] border border-[var(--color-border-subtle)] px-[3px] font-mono">
             lch()
           </code>{' '}
           format. Note that it has limited{' '}
           <a
-            className="text-inherit underline decoration-[var(--c-text-secondary)] hover:text-[var(--c-text-primary)] hover:no-underline"
+            className="text-inherit underline decoration-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:no-underline"
             href="https://caniuse.com/css-lch-lab"
           >
             browser support
@@ -107,14 +107,14 @@ const CreditsSection = () => (
     <p className="mt-3 max-w-[60ch]">
       Palette Studio is based on{' '}
       <a
-        className="text-inherit underline decoration-[var(--c-text-secondary)] hover:text-[var(--c-text-primary)] hover:no-underline"
+        className="text-inherit underline decoration-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:no-underline"
         href="https://github.com/ardov/huetone"
       >
         Huetone
       </a>{' '}
       by{' '}
       <a
-        className="text-inherit underline decoration-[var(--c-text-secondary)] hover:text-[var(--c-text-primary)] hover:no-underline"
+        className="text-inherit underline decoration-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:no-underline"
         href="https://ardov.me"
       >
         Alexey Ardov
@@ -124,14 +124,14 @@ const CreditsSection = () => (
     <p className="mt-3 max-w-[60ch]">
       The original app is heavily inspired by{' '}
       <a
-        className="text-inherit underline decoration-[var(--c-text-secondary)] hover:text-[var(--c-text-primary)] hover:no-underline"
+        className="text-inherit underline decoration-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:no-underline"
         href="https://stripe.com/blog/accessible-color-systems"
       >
         that Stripe article
       </a>
       . And it uses the great{' '}
       <a
-        className="text-inherit underline decoration-[var(--c-text-secondary)] hover:text-[var(--c-text-primary)] hover:no-underline"
+        className="text-inherit underline decoration-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:no-underline"
         href="https://github.com/gka/chroma.js"
       >
         chroma.js
@@ -141,14 +141,14 @@ const CreditsSection = () => (
     <p className="mt-3 max-w-[60ch]">
       Special thanks for{' '}
       <a
-        className="text-inherit underline decoration-[var(--c-text-secondary)] hover:text-[var(--c-text-primary)] hover:no-underline"
+        className="text-inherit underline decoration-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:no-underline"
         href="https://twitter.com/LeaVerou"
       >
         Lea Verou
       </a>
       ,{' '}
       <a
-        className="text-inherit underline decoration-[var(--c-text-secondary)] hover:text-[var(--c-text-primary)] hover:no-underline"
+        className="text-inherit underline decoration-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:no-underline"
         href="https://twitter.com/svgeesus"
       >
         Chris Lilley
@@ -160,14 +160,14 @@ const CreditsSection = () => (
       Accessible Perceptual Contrast Algorithm (APCA) by Andrew Somers is a
       WCAG 3 working draft and may change later. To learn more visit{' '}
       <a
-        className="text-inherit underline decoration-[var(--c-text-secondary)] hover:text-[var(--c-text-primary)] hover:no-underline"
+        className="text-inherit underline decoration-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:no-underline"
         href="https://www.w3.org/WAI/GL/task-forces/silver/wiki/Visual_Contrast_of_Text_Subgroup"
       >
         this page
       </a>{' '}
       or check{' '}
       <a
-        className="text-inherit underline decoration-[var(--c-text-secondary)] hover:text-[var(--c-text-primary)] hover:no-underline"
+        className="text-inherit underline decoration-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:no-underline"
         href="https://github.com/w3c/wcag/issues/695"
       >
         this thread on GitHub
@@ -182,7 +182,7 @@ const Key = ({
   ...props
 }: HTMLAttributes<HTMLSpanElement>) => (
   <span
-    className="inline-block min-w-7 rounded border border-[var(--c-divider)] bg-[var(--c-btn-bg)] px-1 text-center"
+    className="inline-block min-w-7 rounded border border-[var(--color-border-subtle)] bg-[var(--color-interactive-bg)] px-1 text-center"
     {...props}
   >
     {children}

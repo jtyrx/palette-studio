@@ -38,7 +38,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="bg-[var(--c-bg-card)] flex flex-1 flex-col gap-4 overflow-auto px-6 py-4">
+        <section className="bg-[var(--color-surface-card)] flex flex-1 flex-col gap-4 overflow-auto px-6 py-4">
           <section
             className="grid gap-4"
             style={{
@@ -130,10 +130,10 @@ const ScaleIndicator: FC<{ axis: 'l' | 'c' | 'h' }> = ({ axis }) => {
     <div className="grid grid-rows-[26px_auto]">
       <span className="relative inline-block">
         <span
-          className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 w-6 rounded-[var(--radius-m)] text-center text-[var(--c-text-primary)] leading-6"
+          className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 w-6 rounded-[var(--radius-m)] text-center text-[var(--color-text-primary)] leading-6"
           style={{
             fontWeight: pressed ? 900 : undefined,
-            background: pressed ? 'var(--c-btn-bg-active)' : 'var(--c-btn-bg)',
+            background: pressed ? 'var(--color-interactive-bg-active)' : 'var(--color-interactive-bg)',
           }}
         >
           {axis.toUpperCase()}

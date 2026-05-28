@@ -2,7 +2,7 @@ import * as React from 'react'
 
 /** Shared primary control surface (buttons, icon links). */
 export const buttonClass =
-  'inline-flex cursor-pointer items-center justify-center gap-2 rounded-[var(--radius-m)] border-0 bg-[var(--c-btn-bg)] px-2 py-1.5 text-sm leading-5 text-[var(--c-text-secondary)] transition-[color,background-color,transform] duration-100 ease-out hover:bg-[var(--c-btn-bg-hover)] hover:text-[var(--c-text-primary)] active:translate-y-px active:bg-[var(--c-btn-bg-active)] focus:outline-none focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-[3px] focus-visible:outline-[var(--c-text-primary)]'
+  'inline-flex cursor-pointer items-center justify-center gap-2 rounded-[var(--radius-m)] border-0 bg-[var(--color-interactive-bg)] px-2 py-1.5 text-sm leading-5 text-[var(--color-text-secondary)] transition-[color,background-color,transform] duration-100 ease-out hover:bg-[var(--color-interactive-bg-hover)] hover:text-[var(--color-text-primary)] active:translate-y-px active:bg-[var(--color-interactive-bg-active)] focus:outline-none focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-[3px] focus-visible:outline-[var(--color-text-primary)]'
 
 export const Button = React.forwardRef<
   HTMLButtonElement,
@@ -27,7 +27,7 @@ export const Select = React.forwardRef<
       ref={ref}
       className={[
         buttonClass,
-        'active:translate-y-0 [&>option]:bg-[var(--c-bg-card)] [&>option]:text-[var(--c-text-primary)]',
+        'active:translate-y-0 [&>option]:bg-[var(--color-surface-card)] [&>option]:text-[var(--color-text-primary)]',
         className,
       ]
         .filter(Boolean)
@@ -38,7 +38,7 @@ export const Select = React.forwardRef<
 })
 
 const invisibleInputClass =
-  'border-0 bg-transparent p-0 text-[var(--c-text-secondary)] transition-colors duration-100 hover:text-[var(--c-text-primary)] focus:text-[var(--c-text-primary)] focus:outline-none'
+  'border-0 bg-transparent p-0 text-[var(--color-text-secondary)] transition-colors duration-100 hover:text-[var(--color-text-primary)] focus:text-[var(--color-text-primary)] focus:outline-none'
 
 export const InvisibleInput = React.forwardRef<
   HTMLInputElement,
@@ -54,7 +54,7 @@ export const InvisibleInput = React.forwardRef<
 })
 
 const inputClass =
-  'rounded-[var(--radius-m)] border border-transparent bg-[var(--c-btn-bg)] px-2 py-[5px] text-sm leading-5 text-[var(--c-text-primary)] transition-[border-color,color] duration-100 focus:border-[var(--c-text-primary)] focus:text-[var(--c-text-primary)] focus:outline-none'
+  'rounded-[var(--radius-m)] border border-transparent bg-[var(--color-interactive-bg)] px-2 py-[5px] text-sm leading-5 text-[var(--color-text-primary)] transition-[border-color,color] duration-100 focus:border-[var(--color-text-primary)] focus:text-[var(--color-text-primary)] focus:outline-none'
 
 export const Input = React.forwardRef<
   HTMLInputElement,

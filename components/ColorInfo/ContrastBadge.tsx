@@ -10,9 +10,9 @@ export const ContrastBadgeAPCA: FC<{ background: string; color: string }> = ({
   const cr = apcaContrast(background, color)
   const displayCr = Math.floor(cr * 10) / 10
   return (
-    <div className="flex flex-col rounded-[var(--radius-m)] bg-[var(--c-bg-card)] text-center">
+    <div className="flex flex-col rounded-[var(--radius-m)] bg-[var(--color-surface-card)] text-center">
       <span
-        className="w-full rounded-[var(--radius-m)] leading-10 shadow-[inset_0_0_0_1px_var(--c-divider)]"
+        className="w-full rounded-[var(--radius-m)] leading-10 shadow-[inset_0_0_0_1px_var(--color-border-subtle)]"
         style={{ background, color }}
       >
         APCA
@@ -34,9 +34,9 @@ export const ContrastBadgeWCAG: FC<{ background: string; color: string }> = ({
   const cr = wcagContrast(background, color)
   const displayCr = Math.floor(cr * 10) / 10
   return (
-    <div className="flex flex-col rounded-[var(--radius-m)] bg-[var(--c-bg-card)] text-center">
+    <div className="flex flex-col rounded-[var(--radius-m)] bg-[var(--color-surface-card)] text-center">
       <span
-        className="w-full rounded-[var(--radius-m)] leading-10 shadow-[inset_0_0_0_1px_var(--c-divider)]"
+        className="w-full rounded-[var(--radius-m)] leading-10 shadow-[inset_0_0_0_1px_var(--color-border-subtle)]"
         style={{ background, color }}
       >
         WCAG
@@ -61,9 +61,9 @@ function getAPCAComment(cr: number) {
   return 'Fail'
 }
 function getAPCAColor(cr: number) {
-  if (cr >= 60) return 'var(--c-text-success)'
-  if (cr < 30) return 'var(--c-text-error)'
-  return 'var(--c-text-primary)'
+  if (cr >= 60) return 'var(--color-text-success)'
+  if (cr < 30) return 'var(--color-text-error)'
+  return 'var(--color-text-primary)'
 }
 function getWCAGComment(cr: number) {
   if (cr >= 7.0) return 'AAA'
@@ -72,7 +72,7 @@ function getWCAGComment(cr: number) {
   return 'Fail'
 }
 function getWCAGColor(cr: number) {
-  if (cr >= 4.5) return 'var(--c-text-success)'
-  if (cr < 3) return 'var(--c-text-error)'
-  return 'var(--c-text-primary)'
+  if (cr >= 4.5) return 'var(--color-text-success)'
+  if (cr < 3) return 'var(--color-text-error)'
+  return 'var(--color-text-primary)'
 }

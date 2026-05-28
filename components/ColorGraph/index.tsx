@@ -68,7 +68,7 @@ export function Scale({
               style={{
                 backgroundColor: color.hex,
                 color: contrasting,
-                ['--c-contrasting' as string]: contrasting,
+                ['--color-text-contrasting' as string]: contrasting,
               }}
               onMouseDown={e => {
                 if (i === selected || e.ctrlKey) return
@@ -120,7 +120,7 @@ export function Scale({
                   left: `${sectionWidth * i + sectionWidth / 2}px`,
                   width: `${height + 16}px`,
                   '--track':
-                    i === selected ? 'var(--c-divider)' : 'transparent',
+                    i === selected ? 'var(--color-border-subtle)' : 'transparent',
                   '--track-size': `${height}px`,
                   '--bg': showColors ? contrastThumb : color.hex,
                   '--contrast': contrastThumb,

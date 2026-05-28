@@ -95,9 +95,9 @@ export function Canvas(props: {
     <div
       className="overflow-hidden rounded-b-lg"
       style={{
-        backgroundColor: 'var(--c-canvas-2)',
+        backgroundColor: 'var(--color-canvas-2)',
         backgroundImage:
-          'linear-gradient(45deg, var(--c-canvas-1) 25%, transparent 25%), linear-gradient(-45deg, var(--c-canvas-1) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--c-canvas-1) 75%), linear-gradient(-45deg, transparent 75%, var(--c-canvas-1) 75%)',
+          'linear-gradient(45deg, var(--color-canvas-1) 25%, transparent 25%), linear-gradient(-45deg, var(--color-canvas-1) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--color-canvas-1) 75%), linear-gradient(-45deg, transparent 75%, var(--color-canvas-1) 75%)',
         backgroundSize: '6px 6px',
         backgroundPosition: '0 0, 0 3px, 3px -3px, -3px 0px',
       }}
@@ -106,9 +106,9 @@ export function Canvas(props: {
         ref={canvasRef}
         width={width}
         height={height}
-        className="drop-shadow-[0_0_1px_var(--c-canvas-1)]"
+        className="drop-shadow-[0_0_1px_var(--color-canvas-1)]"
         style={{
-          filter: settings.showColors ? undefined : 'var(--canvas-filter)',
+          filter: settings.showColors ? undefined : 'var(--color-canvas-filter)',
         }}
       />
     </div>
