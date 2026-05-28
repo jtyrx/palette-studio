@@ -1,53 +1,46 @@
 'use client'
 
 import { useStore } from '@nanostores/react'
-import React from 'react'
-import { getPaletteLink, setColor, setPalette } from '@/store/palette'
-import { ControlGroup } from '../Inputs'
-import { Button, buttonVariants } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { ThemeButton } from './ThemeButton'
-import { PaletteSelect } from './PaletteSelect'
-import { CopyButton } from '../CopyButton'
-import { Link } from '@/shared/icons/Link'
+import { setColor, setPalette } from '@/store/palette'
+import { Button, ButtonLink, buttonVariants } from '@/components/ui/button'
+import { ButtonGroup } from '@/components/ui/button-group'
+import { SidebarTrigger } from '@/components/ui/sidebar'
+import { ThemeButton } from '@/components/Header/ThemeButton'
+import { ColorEditor } from '@/components/Header/ColorEditor'
+import { ColorActions } from '@/components/Header/ColorActions'
+import { ChartSettings } from '@/components/Header/ChartSettings'
 import { GitHub } from '@/shared/icons/GitHub'
 import { paletteStore } from '@/store/palette'
 import {
   overlayStore,
   setOverlayMode,
   setVersusColor,
-  TOverlayMode,
+  type TOverlayMode,
 } from '@/store/overlay'
-import { ColorEditor } from './ColorEditor'
-import { ColorActions } from './ColorActions'
 import { selectedStore } from '@/store/currentPosition'
-import { ChartSettings } from './ChartSettings'
 
 const modes: TOverlayMode[] = ['APCA', 'WCAG', 'NONE', 'DELTA_E']
 
-const texts = {
+const texts: Record<TOverlayMode, string> = {
   APCA: 'APCA contrast',
   WCAG: 'WCAG contrast',
   NONE: 'Without overlay',
   DELTA_E: 'Delta E distance',
 }
 
-export function Header() {
+export function AppToolbar() {
   const palette = useStore(paletteStore)
   const overlay = useStore(overlayStore)
   const selected = useStore(selectedStore)
 
   return (
-    <header className="flex w-full flex-wrap items-start justify-between gap-2 border-b border-(--color-border-subtle) p-4">
-      <div className="flex flex-wrap gap-2">
-        <PaletteSelect />
-        <CopyButton getContent={() => getPaletteLink(palette)}>
-          <Link />
-          <span className="max-[640px]:hidden">Copy link</span>
-        </CopyButton>
-      </div>
+    <header
+      data-slot="app-toolbar"
+      className="flex min-h-(--layout-shell-toolbar-h) shrink-0 flex-wrap items-center gap-3 border-b border-hairline bg-default px-4 py-2"
+    >
+      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-3">
+        <SidebarTrigger />
 
-      <div className="flex flex-wrap gap-2">
         <ColorEditor
           color={selected.color}
           onChange={color => {
@@ -57,12 +50,16 @@ export function Header() {
             )
           }}
         />
+
         <ColorActions />
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <ControlGroup>
+      <div className="flex flex-wrap items-center gap-2">
+        <ButtonGroup orientation="horizontal">
           <Button
+            type="button"
+            variant="outline"
+            size="sm"
             onClick={() => {
               const idx = modes.findIndex(mode => overlay.mode === mode) + 1
               setOverlayMode(modes[idx % modes.length])
@@ -72,6 +69,9 @@ export function Header() {
           </Button>
           {overlay.mode !== 'NONE' && (
             <Button
+              type="button"
+              variant="outline"
+              size="sm"
               onClick={() =>
                 setVersusColor(
                   overlay.versus === 'selected' ? 'white' : 'selected'
@@ -81,20 +81,19 @@ export function Header() {
               vs. {overlay.versus}
             </Button>
           )}
-        </ControlGroup>
+        </ButtonGroup>
 
         <ChartSettings />
-
         <ThemeButton />
-        <a
-          className={cn(buttonVariants())}
+        <ButtonLink
+          className={buttonVariants({ variant: 'ghost', size: 'icon-sm' })}
           href="https://github.com/ardov/huetone"
           title="Based on Huetone (upstream)"
           target="_blank"
           rel="noopener noreferrer"
         >
           <GitHub />
-        </a>
+        </ButtonLink>
       </div>
     </header>
   )

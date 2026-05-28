@@ -22,8 +22,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { ButtonGroup } from '@/components/ui/button-group'
+import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import { ControlGroup, Input } from '../Inputs'
 import { Button } from '@/components/ui/button'
 
 export const PaletteSelect = () => {
@@ -43,12 +44,18 @@ export const PaletteSelect = () => {
   }
 
   return (
-    <ControlGroup>
+    <ButtonGroup orientation="horizontal" className="w-full">
       <PaletteSelectComponent />
-      <Button title="Rename palette" onClick={() => setRenameState(true)}>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        title="Rename palette"
+        onClick={() => setRenameState(true)}
+      >
         <Edit />
       </Button>
-    </ControlGroup>
+    </ButtonGroup>
   )
 }
 
@@ -58,19 +65,27 @@ export const RenameInput: FC<{
 }> = ({ name, onChange }) => {
   const [value, setValue] = useState(name)
   return (
-    <ControlGroup>
+    <ButtonGroup orientation="horizontal" className="w-full">
       <Input
+        variant="workbench"
         name="Palette name"
         autoFocus
+        className="min-w-0 flex-1"
         value={value}
         onChange={e => setValue(e.target.value)}
-        onKeyPress={e => e.key === 'Enter' && onChange(value)}
+        onKeyDown={e => e.key === 'Enter' && onChange(value)}
         onBlur={() => onChange(value)}
       />
-      <Button title="Save changes" onClick={() => onChange(value)}>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        title="Save changes"
+        onClick={() => onChange(value)}
+      >
         <Check />
       </Button>
-    </ControlGroup>
+    </ButtonGroup>
   )
 }
 
@@ -79,26 +94,18 @@ const PaletteSelectComponent = () => {
   const currentIdx = useStore(paletteIdStore)
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            title={paletteList[currentIdx].name}
-            style={{ width: 200, justifyContent: 'space-between' }}
-          >
-            <span
-              style={{
-                minWidth: 0,
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-              }}
-            >
-              {paletteList[currentIdx].name}
-            </span>
-            <ChevronDown />
-          </Button>
-        }
-      />
+      <DropdownMenuTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="w-full min-w-0 max-w-full justify-between"
+          title={paletteList[currentIdx].name}
+        >
+          <span className="min-w-0 truncate">{paletteList[currentIdx].name}</span>
+          <ChevronDown />
+        </Button>
+      </DropdownMenuTrigger>
 
       <DropdownMenuContent align="start" sideOffset={4} className="min-w-50">
         <DropdownMenuGroup>
@@ -110,13 +117,13 @@ const PaletteSelectComponent = () => {
               key={i}
               className={cn(
                 'cursor-pointer justify-between',
-                i === currentIdx && 'bg-accent'
+                i === currentIdx && 'menu-item-selected'
               )}
               onClick={() => switchPalette(i)}
             >
               {p.name}
               {!p.isPreset && (
-                <span style={{ display: 'flex', gap: 8 }}>
+                <span className="flex gap-2">
                   <Copy
                     onClick={e => {
                       e.preventDefault()

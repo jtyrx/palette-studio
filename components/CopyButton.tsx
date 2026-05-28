@@ -1,12 +1,11 @@
 'use client'
 
 import React, { FC, useEffect, useState } from 'react'
-import type { ComponentProps } from 'react'
-import { Button } from '@/components/ui/button'
+import { Button, type ButtonProps } from '@/components/ui/button'
 
 type CopyButtonProps = {
   getContent: () => string
-} & ComponentProps<'button'>
+} & ButtonProps
 
 export const CopyButton: FC<CopyButtonProps> = ({
   getContent,
@@ -15,19 +14,20 @@ export const CopyButton: FC<CopyButtonProps> = ({
 }) => {
   const [copied, setCopied] = useState(false)
 
-  const onCopy = () => {
-    const content = getContent()
-    void navigator.clipboard.writeText(content)
-    setCopied(true)
-  }
-
   useEffect(() => {
     const timer = setTimeout(() => setCopied(false), 1500)
     return () => clearTimeout(timer)
   }, [copied])
 
   return (
-    <Button {...rest} onClick={onCopy}>
+    <Button
+      type="button"
+      {...rest}
+      onClick={() => {
+        void navigator.clipboard.writeText(getContent())
+        setCopied(true)
+      }}
+    >
       {copied ? 'Copied!' : children}
     </Button>
   )

@@ -1,0 +1,219 @@
+'use client'
+
+import * as React from 'react'
+import { Dialog as SheetPrimitive } from '@base-ui/react/dialog'
+import {cva} from 'class-variance-authority'
+
+import { cn } from '@/lib/utils'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { XIcon } from 'lucide-react'
+
+const sheetSizeVariants = cva('', {
+  variants: {
+    size: {
+      sm: 'data-[side=left]:sm:max-w-xs data-[side=right]:sm:max-w-xs',
+      default: 'data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-sm',
+      lg: 'data-[side=left]:sm:max-w-lg data-[side=right]:sm:max-w-lg',
+    },
+  },
+  defaultVariants: {size: 'default'},
+})
+
+const sheetContentBase = cn(
+  // base positioning + layout
+  'fixed z-50 flex flex-col gap-16 bg-popover bg-clip-padding',
+  'text-sm text-popover-foreground shadow-lg',
+  'transition duration-200 ease-in-out',
+  // side variants
+  'data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:border-t',
+  'data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:border-r',
+  'data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:border-l',
+  'data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b',
+  // open animations
+  'data-open:animate-in data-open:fade-in-0',
+  'data-[side=bottom]:data-open:slide-in-from-bottom-40',
+  'data-[side=left]:data-open:slide-in-from-left-40',
+  'data-[side=right]:data-open:slide-in-from-right-40',
+  'data-[side=top]:data-open:slide-in-from-top-40',
+  // close animations
+  'data-closed:animate-out data-closed:fade-out-0',
+  'data-[side=bottom]:data-closed:slide-out-to-bottom-40',
+  'data-[side=left]:data-closed:slide-out-to-left-40',
+  'data-[side=right]:data-closed:slide-out-to-right-40',
+  'data-[side=top]:data-closed:slide-out-to-top-40',
+)
+
+function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
+  return <SheetPrimitive.Root data-slot='sheet' {...props} />
+}
+Sheet.displayName = 'Sheet'
+
+function SheetTrigger({
+  asChild,
+  children,
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Trigger> & {
+  asChild?: boolean
+}) {
+  return (
+    <SheetPrimitive.Trigger
+      data-slot='sheet-trigger'
+      render={
+        asChild && React.isValidElement(children)
+          ? (children as React.ReactElement)
+          : undefined
+      }
+      {...(asChild ? {} : { children })}
+      {...props}
+    />
+  )
+}
+SheetTrigger.displayName = 'SheetTrigger'
+
+function SheetClose({
+  className,
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Close>) {
+  return (
+    <SheetPrimitive.Close
+      data-slot='sheet-close'
+      className={cn(buttonVariants({variant: 'ghost', size: 'icon-sm'}), className)}
+      {...props}
+    />
+  )
+}
+SheetClose.displayName = 'SheetClose'
+
+function SheetPortal({
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Portal>) {
+  return <SheetPrimitive.Portal data-slot='sheet-portal' {...props} />
+}
+SheetPortal.displayName = 'SheetPortal'
+
+function SheetOverlay({
+  className,
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Backdrop>) {
+  return (
+    <SheetPrimitive.Backdrop
+      data-slot='sheet-overlay'
+      className={cn(
+        /* absolute + body { position: relative } — Base UI Quick Start / iOS 26+ Safari backdrop guidance */
+        'absolute inset-0 z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0',
+        className
+      )}
+      {...props}
+    />
+  )
+}
+SheetOverlay.displayName = 'SheetOverlay'
+
+function SheetContent({
+  className,
+  children,
+  side = 'right',
+  size = 'default',
+  showCloseButton = true,
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Popup> & {
+  side?: 'top' | 'right' | 'bottom' | 'left'
+  size?: 'sm' | 'default' | 'lg'
+  showCloseButton?: boolean
+}) {
+  return (
+    <SheetPortal>
+      <SheetOverlay />
+      <SheetPrimitive.Popup
+        data-slot='sheet-content'
+        data-side={side}
+        className={cn(sheetContentBase, sheetSizeVariants({size}), className)}
+        {...props}
+      >
+        {children}
+        {showCloseButton && (
+          <SheetPrimitive.Close
+            data-slot='sheet-close'
+            render={
+              <Button
+                variant='ghost'
+                className='absolute top-12 right-12'
+                size='icon-sm'
+              >
+                <XIcon />
+                <span className='sr-only'>Close</span>
+              </Button>
+            }
+          />
+        )}
+      </SheetPrimitive.Popup>
+    </SheetPortal>
+  )
+}
+SheetContent.displayName = 'SheetContent'
+
+function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot='sheet-header'
+      className={cn('flex flex-col gap-2 p-16', className)}
+      {...props}
+    />
+  )
+}
+SheetHeader.displayName = 'SheetHeader'
+
+function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot='sheet-footer'
+      className={cn('mt-auto flex flex-col gap-8 p-16', className)}
+      {...props}
+    />
+  )
+}
+SheetFooter.displayName = 'SheetFooter'
+
+function SheetTitle({
+  className,
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Title>) {
+  return (
+    <SheetPrimitive.Title
+      data-slot='sheet-title'
+      className={cn(
+        'font-heading text-base font-medium text-foreground',
+        className
+      )}
+      {...props}
+    />
+  )
+}
+SheetTitle.displayName = 'SheetTitle'
+
+function SheetDescription({
+  className,
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Description>) {
+  return (
+    <SheetPrimitive.Description
+      data-slot='sheet-description'
+      className={cn('text-sm text-muted-foreground', className)}
+      {...props}
+    />
+  )
+}
+SheetDescription.displayName = 'SheetDescription'
+
+export {
+  Sheet,
+  SheetTrigger,
+  SheetClose,
+  SheetPortal,
+  SheetOverlay,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+}

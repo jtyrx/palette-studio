@@ -8,7 +8,13 @@ import { Button } from '@/components/ui/button'
 export function ThemeButton() {
   const { resolvedTheme, setTheme } = useTheme()
   return (
-    <Button onClick={() => setTheme(resolvedTheme === 'light' ? 'dark' : 'light')}>
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon-sm"
+      title={resolvedTheme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
+      onClick={() => setTheme(resolvedTheme === 'light' ? 'dark' : 'light')}
+    >
       {resolvedTheme === 'light' ? <Moon /> : <Sun />}
     </Button>
   )

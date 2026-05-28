@@ -144,6 +144,9 @@ export const PaletteSwatches: FC = () => {
 function SmallButton(props: React.ComponentProps<typeof Button>) {
   return (
     <Button
+      type="button"
+      variant="ghost"
+      size="icon-xs"
       className="pointer-events-none bg-transparent p-0 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100"
       {...props}
     />

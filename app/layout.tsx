@@ -53,7 +53,7 @@ export default function RootLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning className={cn("h-full", "font-sans", geist.variable)}>
-      <body className="flex min-h-screen flex-col">
+      <body className="flex h-svh min-h-0 flex-col overflow-hidden">
         <Providers>{children}</Providers>
       </body>
     </html>

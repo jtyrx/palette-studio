@@ -10,12 +10,16 @@ lerna-debug.log*
 .vercel
 
 node_modules
+.tmp-neutral-system
 build
 .next
 tsconfig.tsbuildinfo
 dist
 dist-ssr
 *.local
+
+# Cursor — generated skills (uipro-cli)
+.cursor/skills/
 
 # Editor directories and files
 .vscode/*

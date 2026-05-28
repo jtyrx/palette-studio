@@ -9,6 +9,29 @@
   --radius-m: 0.375rem;
   --radius-l: 1.5rem;
   --radius: 0.625rem;
+
+  /* neutral-system UI spacing + control radii */
+  --spacing: 0.0625rem;
+  --spacing-icon-lg: --spacing(25);
+  --spacing-icon-md: --spacing(21);
+  --spacing-icon-sm: --spacing(19);
+  --spacing-widget-xs: --spacing(19);
+  --spacing-widget-sm: --spacing(25);
+  --spacing-widget-md: --spacing(35);
+  --spacing-widget-lg: --spacing(45);
+  --spacing-widget-xl: --spacing(73);
+
+  --pt: calc(1rem / 12);
+  --radius-full: calc(infinity * 1px);
+  --radius-menu: calc(12 * var(--pt));
+  --radius-card: calc(10 * var(--pt));
+  --radius-input: calc(8 * var(--pt));
+  --radius-select: calc(6 * var(--pt));
+
+  --text-label: --spacing(13);
+  --text-caption: --spacing(11);
+  --text-micro: 0.65rem;
+  --text-nano: 0.6rem;
 }
 
 /* ─── Tier 2: Semantic aliases ─────────────────────────────────────────────── */
@@ -49,6 +72,9 @@
   --chart-border-p3: oklch(0.55 0 0);
   --chart-border-rec2020: oklch(0.42 0 0);
   --layout-panel-min: 28.571rem;
+  --layout-shell-toolbar-h: 3rem;
+  --layout-sidebar-min: 12rem;
+  --layout-sidebar-max: 28rem;
 
   /* shadcn compatibility — semantic tokens drive these */
   --background: var(--color-surface-default);
@@ -77,6 +103,68 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: var(--color-border-subtle);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* neutral-system UI aliases */
+  --color-text-default: var(--color-text-primary);
+  --color-text-subtle: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-hint);
+  --color-text-disabled: var(--color-text-hint);
+  --color-text-on: var(--color-text-primary);
+  --color-text-brand: var(--primary);
+  --color-surface-sunken: oklch(0.08 0.025 255);
+  --color-surface-subtle: oklch(0.14 0.015 255);
+  --color-surface-raised: var(--color-surface-card);
+  --color-surface-overlay: var(--color-surface-card);
+  --color-surface-brand: var(--primary);
+  --color-border-default: var(--color-border-subtle);
+  --color-border-muted: var(--color-border-subtle);
+  --color-border-emphasis: var(--color-border-subtle);
+  --color-border-focus: var(--ring);
+  --color-border-brand: var(--primary);
+  --color-overlay-scrim: oklch(0% 0 0 / 0.6);
+  --color-text-inverse: oklch(0.18 0 0);
+  --color-surface-inverse: oklch(0.96 0 0);
+  --color-border-inverse: oklch(0.18 0 0);
+  --chrome-hairline: color-mix(
+    in oklch,
+    var(--color-text-default) 10%,
+    transparent
+  );
+  --chrome-hairline-strong: color-mix(
+    in oklch,
+    var(--color-text-default) 18%,
+    transparent
+  );
+  --chrome-chip: color-mix(
+    in oklch,
+    var(--color-text-default) 6%,
+    transparent
+  );
+  --chrome-field: color-mix(
+    in oklch,
+    var(--color-text-default) 4%,
+    transparent
+  );
+  --chrome-overlay-soft: color-mix(
+    in oklch,
+    var(--color-text-default) 3%,
+    transparent
+  );
+  --chrome-overlay-strong: color-mix(
+    in oklch,
+    var(--color-text-default) 15%,
+    transparent
+  );
+  --destructive-subtle: color-mix(
+    in oklch,
+    var(--destructive) 10%,
+    transparent
+  );
+  --destructive-hoverd: color-mix(
+    in oklch,
+    var(--destructive) 20%,
+    transparent
+  );
 }
 
 [data-theme='light'] {
@@ -121,6 +209,27 @@
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
+
+  /* neutral-system UI aliases (light) */
+  --color-text-default: var(--color-text-primary);
+  --color-text-subtle: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-hint);
+  --color-text-disabled: var(--color-text-hint);
+  --color-text-on: var(--color-text-primary);
+  --color-text-brand: var(--primary);
+  --color-surface-sunken: oklch(0.96 0.006 260);
+  --color-surface-subtle: oklch(0.99 0 0);
+  --color-surface-raised: var(--color-surface-card);
+  --color-surface-overlay: var(--color-surface-card);
+  --color-surface-brand: var(--primary);
+  --color-border-default: var(--color-border-subtle);
+  --color-border-muted: var(--color-border-subtle);
+  --color-border-emphasis: var(--color-border-subtle);
+  --color-border-focus: var(--ring);
+  --color-border-brand: var(--primary);
+  --color-text-inverse: oklch(0.985 0 0);
+  --color-surface-inverse: oklch(0.205 0 0);
+  --color-border-inverse: oklch(0.985 0 0);
 }
 
 /* ─── Tier 3: Tailwind bridge ──────────────────────────────────────────────── */
@@ -160,6 +269,276 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* neutral-system semantic utilities */
+  --text-color-default: var(--color-text-default);
+  --text-color-subtle: var(--color-text-subtle);
+  --text-color-muted: var(--color-text-muted);
+  --text-color-on: var(--color-text-on);
+  --text-color-disabled: var(--color-text-disabled);
+  --text-color-brand: var(--color-text-brand);
+  --text-color-inverse: var(--color-text-inverse);
+  --background-color-sunken: var(--color-surface-sunken);
+  --background-color-default: var(--color-surface-default);
+  --background-color-subtle: var(--color-surface-subtle);
+  --background-color-raised: var(--color-surface-raised);
+  --background-color-overlay: var(--color-surface-overlay);
+  --background-color-brand: var(--color-surface-brand);
+  --background-color-inverse: var(--color-surface-inverse);
+  --background-color-chip: var(--chrome-chip);
+  --background-color-field: var(--chrome-field);
+  --background-color-overlay-soft: var(--chrome-overlay-soft);
+  --background-color-overlay-strong: var(--chrome-overlay-strong);
+  --border-color-default: var(--color-border-default);
+  --border-color-focus: var(--color-border-focus);
+  --border-color-muted: var(--color-border-muted);
+  --border-color-emphasis: var(--color-border-emphasis);
+  --border-color-brand: var(--color-border-brand);
+  --border-color-hairline: var(--chrome-hairline);
+  --border-color-hairline-strong: var(--chrome-hairline-strong);
+  --border-color-inverse: var(--color-border-inverse);
+  --color-text-default: var(--color-text-default);
+  --color-text-subtle: var(--color-text-subtle);
+  --color-text-muted: var(--color-text-muted);
+  --color-surface-raised: var(--color-surface-raised);
+  --color-surface-subtle: var(--color-surface-subtle);
+  --color-surface-sunken: var(--color-surface-sunken);
+  --color-surface-overlay: var(--color-surface-overlay);
+  --color-destructive-subtle: var(--destructive-subtle);
+  --color-destructive-hoverd: var(--destructive-hoverd);
+  --ns-background-inverse: var(--color-surface-inverse);
+  --ns-border-inverse: var(--color-border-inverse);
+  --ns-text-inverse: var(--color-text-inverse);
+  --radius-control: var(--radius);
+  --shadow-raised: 0 1px 2px
+    color-mix(in oklch, var(--color-text-default) 8%, transparent);
+  --shadow-lg:
+    0 4px 16px -4px
+      color-mix(in oklch, var(--color-text-default) 10%, transparent),
+    0 2px 6px -2px
+      color-mix(in oklch, var(--color-text-default) 6%, transparent);
+  --shadow-overlay: 0 8px 30px
+    color-mix(in oklch, var(--color-text-default) 12%, transparent);
+  --shadow-xl:
+    0 12px 40px -8px
+      color-mix(in oklch, var(--color-text-default) 14%, transparent),
+    0 4px 14px -4px
+      color-mix(in oklch, var(--color-text-default) 8%, transparent);
+}
+
+/* neutral-system button + menu utilities */
+@utility btn-sys {
+  display: inline-flex;
+  cursor: pointer;
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  outline: none;
+  text-decoration: none;
+  user-select: none;
+  background-clip: padding-box;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 0;
+    pointer-events: none;
+  }
+
+  transition-property:
+    color, background-color, border-color, box-shadow, opacity;
+  transition-duration: 150ms;
+
+  font-family: var(--font-sans);
+  font-size: var(--text-size, var(--text-label));
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0;
+  text-transform: capitalize;
+  white-space: nowrap;
+  text-box: trim-both cap alphabetic;
+
+  &[data-size='xs'] {
+    column-gap: --spacing(2);
+    min-height: var(--spacing-widget-xs);
+    padding: --spacing(2) --spacing(8);
+    --text-size: var(--text-caption);
+  }
+  &[data-size='sm'] {
+    column-gap: --spacing(4);
+    min-height: var(--spacing-widget-sm);
+    padding: --spacing(3) --spacing(10);
+  }
+  &[data-size='md'] {
+    column-gap: --spacing(4);
+    min-height: var(--spacing-widget-md);
+    padding: --spacing(4) --spacing(12);
+  }
+  &[data-size='lg'] {
+    column-gap: --spacing(6);
+    min-height: var(--spacing-widget-lg);
+    padding: --spacing(6) --spacing(16);
+  }
+
+  &[data-variant='default'] {
+    color: var(--text-color-inverse);
+    background-color: var(--background-color-inverse);
+
+    &:hover {
+      color: var(--text-color-default);
+      background-color: transparent;
+      border-color: var(--border-color-inverse);
+    }
+  }
+
+  &[data-variant='secondary'] {
+    color: var(--text-color-on);
+    background-color: var(--background-color-brand);
+
+    &:hover {
+      color: var(--text-color-brand);
+      background-color: transparent;
+      border-color: var(--border-color-brand);
+    }
+  }
+
+  &[data-variant='outline'] {
+    color: var(--text-color-default);
+    background-color: transparent;
+    border-color: var(--border-color-inverse);
+
+    &:hover {
+      background-color: var(--ns-background-inverse);
+      color: var(--ns-text-inverse);
+    }
+  }
+
+  &[data-variant='ghost'] {
+    color: var(--text-color-default);
+
+    &:hover {
+      background-color: var(--background-color-subtle);
+      color: var(--text-color-default);
+    }
+  }
+
+  &[data-variant='destructive'] {
+    background-color: color-mix(
+      in oklch,
+      var(--color-destructive) 10%,
+      transparent
+    );
+    color: var(--color-destructive);
+
+    &:hover {
+      background-color: var(--color-destructive-hoverd);
+    }
+  }
+
+  &[data-variant='link'] {
+    color: var(--text-color-default);
+    text-decoration-line: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: transparent;
+
+    &:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+}
+
+@utility btn-group-sys {
+  &[data-orientation='horizontal'] {
+    & > [data-slot='button']:not(:first-child):not(:last-child) {
+      border-radius: 0;
+    }
+    & > [data-slot='button']:first-child {
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+    & > [data-slot='button']:last-child {
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+    }
+  }
+  &[data-orientation='vertical'] {
+    & > [data-slot='button']:not(:first-child):not(:last-child) {
+      border-radius: 0;
+    }
+    & > [data-slot='button']:first-child {
+      border-end-start-radius: 0;
+      border-end-end-radius: 0;
+    }
+    & > [data-slot='button']:last-child {
+      border-start-start-radius: 0;
+      border-start-end-radius: 0;
+    }
+  }
+}
+
+@utility menu-item-selected {
+  font-weight: 500;
+  color: var(--color-foreground);
+
+  &::after {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+    margin-inline-start: auto;
+    flex-shrink: 0;
+    align-self: center;
+  }
+}
+
+@utility ns-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  border-radius: var(--radius-m);
+  border: 1px solid transparent;
+  background-color: var(--color-interactive-bg);
+  padding: 0.3125rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--color-text-primary);
+  outline: none;
+  transition:
+    border-color 100ms ease-out,
+    color 100ms ease-out,
+    background-color 100ms ease-out;
+
+  &::placeholder {
+    color: var(--color-text-hint);
+  }
+
+  &:hover {
+    background-color: var(--color-interactive-bg-hover);
+    color: var(--color-text-primary);
+  }
+
+  &:focus {
+    border-color: var(--color-text-primary);
+    color: var(--color-text-primary);
+  }
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+[data-slot='app-toolbar'] .btn-sys {
+  text-transform: none;
 }
 
 /* ─── Base reset ───────────────────────────────────────────────────────────── */
