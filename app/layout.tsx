@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import './globals.css'
-import { Geist } from "next/font/google";
-import { cn } from "@/lib/utils";
+import { Geist } from 'next/font/google'
+import { cn } from '@/lib/utils'
+import { Providers } from './providers'
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -52,7 +53,9 @@ export default function RootLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning className={cn("h-full", "font-sans", geist.variable)}>
-      <body className="flex min-h-screen flex-col">{children}</body>
+      <body className="flex min-h-screen flex-col">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   )
 }

@@ -1,13 +1,15 @@
-import { useColorScheme } from '@/shared/hooks/useColorScheme'
+'use client'
+
+import { useTheme } from 'next-themes'
 import { MoonIcon } from '@/shared/icons/Moon'
 import { SunIcon } from '@/shared/icons/Sun'
 import { Button } from '../inputs'
 
 export function ThemeButton() {
-  const [scheme, toggle] = useColorScheme()
+  const { resolvedTheme, setTheme } = useTheme()
   return (
-    <Button onClick={toggle}>
-      {scheme === 'light' ? <MoonIcon /> : <SunIcon />}
+    <Button onClick={() => setTheme(resolvedTheme === 'light' ? 'dark' : 'light')}>
+      {resolvedTheme === 'light' ? <MoonIcon /> : <SunIcon />}
     </Button>
   )
 }
