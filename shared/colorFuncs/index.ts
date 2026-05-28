@@ -34,6 +34,7 @@ export type TColorSpace = {
   ranges: TLchModel['ranges']
   hex2color: (hex: string) => TColor | null
   lch2color: (lch: LCH) => TColor
+  lch2xyz: (lch: LCH) => XYZ
 }
 
 /** Makes color space object with essential functions */
@@ -93,5 +94,5 @@ function colorSpaceMaker(colorSpace: TLchModel): TColorSpace {
     }
   }
 
-  return { name, ranges, hex2color, lch2color }
+  return { name, ranges, hex2color, lch2color, lch2xyz }
 }

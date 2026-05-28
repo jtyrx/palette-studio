@@ -13,8 +13,7 @@ import { useKeyPress } from '@/shared/hooks/useKeyPress'
 import { paletteStore } from '@/store/palette'
 import { selectedStore, setSelected } from '@/store/currentPosition'
 import { Header } from './Header'
-
-const chartWidth = 400
+import { SelectedColorCard } from './SelectedColorCard'
 
 export default function App() {
   const palette = useStore(paletteStore)
@@ -30,7 +29,7 @@ export default function App() {
       <Header />
       <main className="flex min-h-0 flex-1 max-[860px]:flex-col">
         <KeyPressHandler />
-        <section className="flex w-min min-w-[400px] flex-col gap-4 overflow-auto p-4">
+        <section className="flex w-min min-w-[var(--layout-panel-min)] flex-col gap-4 overflow-auto p-4">
           <PaletteSwatches />
           <ColorInfo />
           <div className="flex flex-wrap gap-2">
@@ -39,14 +38,9 @@ export default function App() {
         </section>
 
         <section className="bg-[var(--color-surface-card)] flex flex-1 flex-col gap-4 overflow-auto px-6 py-4">
-          <section
-            className="grid gap-4"
-            style={{
-              gridTemplateColumns: `${chartWidth}px 0.5rem ${chartWidth}px`,
-            }}
-          >
+          <SelectedColorCard />
+          <section className="color-graph-grid">
             <Scale
-              width={chartWidth}
               selected={selected.toneId}
               channel="l"
               colors={palette.colors[selected.hueId]}
@@ -58,7 +52,6 @@ export default function App() {
             />
             <ScaleIndicator axis="l" />
             <Scale
-              width={chartWidth}
               selected={selected.hueId}
               channel="l"
               colors={hueColors}
@@ -70,7 +63,6 @@ export default function App() {
             />
 
             <Scale
-              width={chartWidth}
               selected={selected.toneId}
               channel="c"
               colors={palette.colors[selected.hueId]}
@@ -82,7 +74,6 @@ export default function App() {
             />
             <ScaleIndicator axis="c" />
             <Scale
-              width={chartWidth}
               selected={selected.hueId}
               channel="c"
               colors={hueColors}
@@ -94,7 +85,6 @@ export default function App() {
             />
 
             <Scale
-              width={chartWidth}
               selected={selected.toneId}
               channel="h"
               colors={palette.colors[selected.hueId]}
@@ -106,7 +96,6 @@ export default function App() {
             />
             <ScaleIndicator axis="h" />
             <Scale
-              width={chartWidth}
               selected={selected.hueId}
               channel="h"
               colors={hueColors}

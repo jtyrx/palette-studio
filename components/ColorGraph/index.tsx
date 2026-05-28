@@ -8,13 +8,12 @@ import { chartSettingsStore } from '@/store/chartSettings'
 import type { ChangeEvent, CSSProperties } from 'react'
 import { Canvas } from './Chart/Canvas'
 import { clamp } from '@/shared/utils'
+import { useElementSize } from '@/shared/hooks/useElementSize'
 
 type ScaleProps = {
   colors: TColor[]
   selected: number
   channel: Channel
-  height?: number
-  width?: number
   onSelect: (idx: number) => void
   onColorChange: (idx: number, lch: LCH) => void
 }
@@ -23,15 +22,14 @@ export function Scale({
   colors,
   selected,
   channel = 'l',
-  height = 150,
-  width = 400,
   onSelect,
   onColorChange,
 }: ScaleProps) {
   const { showColors } = useStore(chartSettingsStore)
   const { ranges } = useStore(colorSpaceStore)
+  const { ref: chartRef, size } = useElementSize<HTMLDivElement>()
+
   if (!colors?.length) return null
-  const sectionWidth = width / colors.length
 
   const setColor = (color: TColor, idx: number, value: number) => {
     const { l, c, h } = color
@@ -41,13 +39,10 @@ export function Scale({
     if (channel === 'h') onColorChange(idx, [l, c, value])
   }
 
+  const chartReady = size.width > 0 && size.height > 0
+
   return (
-    <div
-      className="flex flex-col"
-      style={{
-        width: width,
-      }}
-    >
+    <div className="color-graph-scale">
       <div className="flex overflow-hidden rounded-t-lg">
         {colors.map((color, i) => {
           const contrasting = getMostContrast(color.hex, ['black', 'white'])
@@ -93,16 +88,19 @@ export function Scale({
           )
         })}
       </div>
-      <div className="relative m-0 flex p-0 leading-none">
-        <Canvas
-          width={width}
-          height={height}
-          channel={channel}
-          colors={colors}
-        />
+      <div ref={chartRef} className="color-graph-chart">
+        {chartReady && (
+          <Canvas
+            width={size.width}
+            height={size.height}
+            channel={channel}
+            colors={colors}
+          />
+        )}
 
         {colors.map((color, i) => {
           const contrastThumb = getMostContrast(color.hex, ['#fff', '#000'])
+          const knobLeft = `${((i + 0.5) / colors.length) * 100}%`
           return (
             <input
               key={i}
@@ -117,11 +115,9 @@ export function Scale({
               onClick={() => onSelect(i)}
               style={
                 {
-                  left: `${sectionWidth * i + sectionWidth / 2}px`,
-                  width: `${height + 16}px`,
+                  left: knobLeft,
                   '--track':
                     i === selected ? 'var(--color-border-subtle)' : 'transparent',
-                  '--track-size': `${height}px`,
                   '--bg': showColors ? contrastThumb : color.hex,
                   '--contrast': contrastThumb,
                 } as CSSProperties

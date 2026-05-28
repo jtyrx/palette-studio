@@ -2,7 +2,12 @@ import { More } from '@/shared/icons/More'
 import { EqualizeH } from '@/shared/icons/EqualizeH'
 import { EqualizeL } from '@/shared/icons/EqualizeL'
 import { Minimize } from '@/shared/icons/Minimize'
-import * as Menu from '../DropdownMenu'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Button } from '../inputs'
 import {
   currentHueToRow,
@@ -12,36 +17,38 @@ import {
 
 export const ColorActions = () => {
   return (
-    <Menu.Root>
-      <Menu.Trigger>
-        <Button title="Actions">
-          <More />
-        </Button>
-      </Menu.Trigger>
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button title="Actions">
+            <More />
+          </Button>
+        }
+      />
 
-      <Menu.Content align="end" sideOffset={4}>
-          <Menu.Item
-            onSelect={pushColorsIntoRgb}
-            title="Not all LCH colors are displayable in RGB color space. This button will tweak all LCH values to be displayable."
-          >
-            <span style={{ display: 'flex', gap: 8 }}>
-              <Minimize />
-              Make colors displayable
-            </span>
-          </Menu.Item>
-          <Menu.Item onSelect={currentHueToRow}>
-            <span style={{ display: 'flex', gap: 8 }}>
-              <EqualizeH />
-              Apply current hue to row
-            </span>
-          </Menu.Item>
-          <Menu.Item onSelect={currentLuminanceToColumn}>
-            <span style={{ display: 'flex', gap: 8 }}>
-              <EqualizeL />
-              Apply current luminance to column
-            </span>
-          </Menu.Item>
-      </Menu.Content>
-    </Menu.Root>
+      <DropdownMenuContent align="end" sideOffset={4}>
+        <DropdownMenuItem
+          onClick={pushColorsIntoRgb}
+          title="Not all LCH colors are displayable in RGB color space. This button will tweak all LCH values to be displayable."
+        >
+          <span style={{ display: 'flex', gap: 8 }}>
+            <Minimize />
+            Make colors displayable
+          </span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={currentHueToRow}>
+          <span style={{ display: 'flex', gap: 8 }}>
+            <EqualizeH />
+            Apply current hue to row
+          </span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={currentLuminanceToColumn}>
+          <span style={{ display: 'flex', gap: 8 }}>
+            <EqualizeL />
+            Apply current luminance to column
+          </span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

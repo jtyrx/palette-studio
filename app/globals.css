@@ -41,6 +41,15 @@
   --color-canvas-1: oklch(0.862 0 0);
   --color-canvas-2: oklch(0.941 0 0);
 
+  /* Chart layout (rem + fluid height) */
+  --chart-width: 36rem;
+  --chart-height: clamp(11rem, 18vh, 14rem);
+  --chart-axis-gap: 0.5rem;
+  --chart-knob-padding: 1rem;
+  --chart-border-p3: oklch(0.55 0 0);
+  --chart-border-rec2020: oklch(0.42 0 0);
+  --layout-panel-min: 28.571rem;
+
   /* shadcn compatibility — semantic tokens drive these */
   --background: var(--color-surface-default);
   --foreground: var(--color-text-primary);
@@ -251,6 +260,36 @@ body {
   border: 0.125rem solid var(--color-surface-default);
 }
 
+/* ─── Color graph layout ───────────────────────────────────────────────────── */
+
+.color-graph-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) var(--chart-axis-gap) minmax(0, 1fr);
+}
+
+.color-graph-scale {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--chart-width);
+}
+
+.color-graph-chart {
+  position: relative;
+  width: 100%;
+  height: var(--chart-height);
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
+
+.color-graph-chart canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 /* ─── Graph controls ───────────────────────────────────────────────────────── */
 
 .graph-value-input {
@@ -285,13 +324,15 @@ body {
 
 .graph-knob {
   position: absolute;
-  height: 1px;
+  width: calc(var(--chart-height) + var(--chart-knob-padding));
+  height: 0.0625rem;
   bottom: -0.5rem;
-  transform: translateX(0.5px) rotate(-90deg);
+  transform: translateX(0.0357rem) rotate(-90deg);
   transform-origin: bottom left;
   margin: 0;
   background-color: transparent;
   -webkit-appearance: none;
+  --track-size: var(--chart-height);
 }
 
 .graph-knob:focus {
@@ -300,7 +341,7 @@ body {
 
 .graph-knob::-webkit-slider-runnable-track {
   border: 0;
-  height: 1px;
+  height: 0.0625rem;
   background: linear-gradient(var(--track), var(--track));
   background-size: var(--track-size);
   background-repeat: no-repeat;
@@ -309,7 +350,7 @@ body {
 
 .graph-knob::-moz-range-track {
   border: 0;
-  height: 1px;
+  height: 0.0625rem;
   background: linear-gradient(var(--track), var(--track));
   background-size: var(--track-size);
   background-repeat: no-repeat;

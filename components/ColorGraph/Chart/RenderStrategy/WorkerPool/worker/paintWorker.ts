@@ -1,8 +1,11 @@
 import * as Comlink from 'comlink'
 import { spaceName, TColor } from '@/shared/types'
 import { colorSpaces } from '@/shared/colorFuncs'
+import type { BorderColor } from '@/shared/colorFuncs/chartGamut'
+import { Space } from '@/shared/colorFuncs/chartGamut'
 import { paddedScale, sycledLerp } from '@/shared/interpolation'
-import { Pixels, TPixelData } from './Pixels'
+import { Pixels } from './Pixels'
+import { paintChartColumn } from './chartColumnPaint'
 
 export type DrawChartProps = {
   width: number
@@ -14,13 +17,52 @@ export type DrawChartProps = {
   showColors?: boolean
   showP3?: boolean
   showRec2020?: boolean
+  p3Support?: boolean
+  borderP3?: BorderColor
+  borderRec2020?: BorderColor
 }
 
-const getSrgbPixel = (): TPixelData => [255, 255, 255, 255]
-const getP3pixel = (x: number, y: number): TPixelData => [198, 198, 198, 255]
-const getRec2020pixel = (x: number, y: number): TPixelData => [171, 171, 171, 255]
-// 1px stroke at the sRGB→P3 gamut boundary
-const P3_CONTOUR: TPixelData = [130, 130, 130, 255]
+const DEFAULT_BORDER_P3: BorderColor = {
+  r: 130 / 255,
+  g: 130 / 255,
+  b: 130 / 255,
+  alpha: 1,
+}
+
+const DEFAULT_BORDER_REC2020: BorderColor = {
+  r: 100 / 255,
+  g: 100 / 255,
+  b: 100 / 255,
+  alpha: 1,
+}
+
+type ColumnContext = {
+  width: number
+  height: number
+  widthFrom: number
+  widthTo: number
+  showColors: boolean
+  showP3: boolean
+  showRec2020: boolean
+  p3Support: boolean
+  borderP3: BorderColor
+  borderRec2020: BorderColor
+  lch2xyz: (lch: import('@/shared/types').LCH) => import('@/shared/types').XYZ
+}
+
+function paintSlice(
+  ctx: ColumnContext,
+  paintColumn: (pixels: Pixels, columnX: number) => void
+) {
+  const sliceWidth = ctx.widthTo - ctx.widthFrom
+  const pixels = new Pixels(sliceWidth, ctx.height)
+
+  for (let x = ctx.widthFrom; x < ctx.widthTo; x++) {
+    paintColumn(pixels, x - ctx.widthFrom)
+  }
+
+  return bakeBitmap(pixels)
+}
 
 function drawLuminosityChart(props: DrawChartProps) {
   const {
@@ -28,57 +70,68 @@ function drawLuminosityChart(props: DrawChartProps) {
     height,
     colors,
     mode,
-    showColors,
-    showP3,
-    showRec2020,
+    showColors = false,
+    showP3 = false,
+    showRec2020 = false,
+    p3Support = false,
+    borderP3 = DEFAULT_BORDER_P3,
+    borderRec2020 = DEFAULT_BORDER_REC2020,
     widthFrom = 0,
     widthTo = width,
   } = props
-  const { ranges, lch2color } = colorSpaces[mode]
-  let pixels = new Pixels(widthTo - widthFrom, height)
-  let chromaScale = paddedScale(
+
+  const { ranges, lch2xyz } = colorSpaces[mode]
+  const chromaScale = paddedScale(
     width,
     colors.map(color => color.c)
   )
-  let hueScale = paddedScale(
+  const hueScale = paddedScale(
     width,
     colors.map(color => color.h),
     ranges.h.max
   )
 
-  for (let x = widthFrom; x < widthTo; x++) {
-    let c = chromaScale(x)
-    let h = hueScale(x)
-    let hadColors = false
-    let wasInSRGB = false
+  return paintSlice(
+    {
+      width,
+      height,
+      widthFrom,
+      widthTo,
+      showColors,
+      showP3,
+      showRec2020,
+      p3Support,
+      borderP3,
+      borderRec2020,
+      lch2xyz,
+    },
+    (pixels, columnX) => {
+      const x = widthFrom + columnX
+      const c = chromaScale(x)
+      const h = hueScale(x)
 
-    for (let y = height; y >= 0; y--) {
-      let l = sycledLerp(ranges.l.max, ranges.l.min, y / height)
-      const { r, g, b, within_sRGB, within_P3, within_Rec2020 } = lch2color([l, c, h])
-
-      const dx = x - widthFrom
-      if (within_sRGB) {
-        hadColors = true
-        wasInSRGB = true
-        pixels.setPixel(dx, y, showColors ? [r, g, b, 255] : getSrgbPixel())
-      } else if (wasInSRGB && within_P3) {
-        pixels.setPixel(dx, y, P3_CONTOUR)
-        wasInSRGB = false
-      } else if (showP3 && within_P3) {
-        pixels.setPixel(dx, y, getP3pixel(dx, y))
-      } else if (showRec2020 && within_Rec2020) {
-        pixels.setPixel(dx, y, getRec2020pixel(dx, y))
-      } else {
-        wasInSRGB = false
-      }
-
-      // Luminosity chart only has colors in the middle; once undisplayable after hadColors, no more will appear.
-      const displayable = showRec2020 ? within_Rec2020 : showP3 ? within_P3 : within_sRGB
-      if (!displayable && hadColors) break
+      paintChartColumn({
+        pixels,
+        columnX,
+        height,
+        block: 2,
+        hasGaps: true,
+        showP3,
+        showRec2020,
+        p3Support,
+        showColors,
+        borderP3,
+        borderRec2020,
+        lch2xyz,
+        sampleLch: y => {
+          const l = sycledLerp(ranges.l.max, ranges.l.min, y / height)
+          return [l, c, h]
+        },
+        shouldStopColumn: (pixel, _y, hadColors) =>
+          hadColors && pixel[0] === Space.Out,
+      })
     }
-  }
-
-  return bakeBitmap(pixels)
+  )
 }
 
 function drawChromaChart(props: DrawChartProps) {
@@ -87,60 +140,69 @@ function drawChromaChart(props: DrawChartProps) {
     height,
     colors,
     mode,
-    showColors,
-    showP3,
-    showRec2020,
+    showColors = false,
+    showP3 = false,
+    showRec2020 = false,
+    p3Support = false,
+    borderP3 = DEFAULT_BORDER_P3,
+    borderRec2020 = DEFAULT_BORDER_REC2020,
     widthFrom = 0,
     widthTo = width,
   } = props
-  const { ranges, lch2color } = colorSpaces[mode]
-  let pixels = new Pixels(widthTo - widthFrom, height)
-  let luminostyScale = paddedScale(
+
+  const { ranges, lch2xyz } = colorSpaces[mode]
+  const luminostyScale = paddedScale(
     width,
     colors.map(color => color.l)
   )
-  let hueScale = paddedScale(
+  const hueScale = paddedScale(
     width,
     colors.map(color => color.h),
     ranges.h.max
   )
 
-  for (let x = widthFrom; x < widthTo; x++) {
-    let l = luminostyScale(x)
-    let h = hueScale(x)
+  return paintSlice(
+    {
+      width,
+      height,
+      widthFrom,
+      widthTo,
+      showColors,
+      showP3,
+      showRec2020,
+      p3Support,
+      borderP3,
+      borderRec2020,
+      lch2xyz,
+    },
+    (pixels, columnX) => {
+      const x = widthFrom + columnX
+      const l = luminostyScale(x)
+      const h = hueScale(x)
 
-    // TODO: it will be a good optimisation to remember previous L H values and return the same column if they haven't changed
-
-    // TODO: another good optimisation is to remember previous last displayable color and start from it. Or even combine it with binary search.
-
-    let wasInSRGB = false
-
-    for (let y = height; y >= 0; y--) {
-      let c = sycledLerp(ranges.c.max, ranges.c.min, y / height)
-      const { r, g, b, within_sRGB, within_P3, within_Rec2020 } = lch2color([l, c, h])
-
-      const dx = x - widthFrom
-      if (within_sRGB) {
-        wasInSRGB = true
-        pixels.setPixel(dx, y, showColors ? [r, g, b, 255] : getSrgbPixel())
-      } else if (wasInSRGB && within_P3) {
-        pixels.setPixel(dx, y, P3_CONTOUR)
-        wasInSRGB = false
-      } else if (showP3 && within_P3) {
-        pixels.setPixel(dx, y, getP3pixel(dx, y))
-      } else if (showRec2020 && within_Rec2020) {
-        pixels.setPixel(dx, y, getRec2020pixel(dx, y))
-      } else {
-        wasInSRGB = false
-      }
-
-      // If color with this chroma is undisplayable, all colors with higher chroma also will be undisplayable.
-      const displayable = showRec2020 ? within_Rec2020 : showP3 ? within_P3 : within_sRGB
-      if (!displayable) break
+      paintChartColumn({
+        pixels,
+        columnX,
+        height,
+        block: 6,
+        hasGaps: false,
+        showP3,
+        showRec2020,
+        p3Support,
+        showColors,
+        borderP3,
+        borderRec2020,
+        lch2xyz,
+        sampleLch: y => {
+          const c = sycledLerp(ranges.c.max, ranges.c.min, y / height)
+          return [l, c, h]
+        },
+        // Max chroma is at y=0; do not stop on the initial Out region above the gamut body.
+        shouldStopColumn: (pixel, _y, hadColors) =>
+          hadColors && pixel[0] === Space.Out,
+      })
     }
-  }
-
-  return bakeBitmap(pixels)
+  )
 }
 
 function drawHueChart(props: DrawChartProps) {
@@ -149,66 +211,75 @@ function drawHueChart(props: DrawChartProps) {
     height,
     colors,
     mode,
-    showColors,
-    showP3,
-    showRec2020,
+    showColors = false,
+    showP3 = false,
+    showRec2020 = false,
+    p3Support = false,
+    borderP3 = DEFAULT_BORDER_P3,
+    borderRec2020 = DEFAULT_BORDER_REC2020,
     widthFrom = 0,
     widthTo = width,
   } = props
-  const { ranges, lch2color } = colorSpaces[mode]
-  let pixels = new Pixels(widthTo - widthFrom, height)
-  let luminostyScale = paddedScale(
+
+  const { ranges, lch2xyz } = colorSpaces[mode]
+  const luminostyScale = paddedScale(
     width,
     colors.map(color => color.l)
   )
-  let chromaScale = paddedScale(
+  const chromaScale = paddedScale(
     width,
     colors.map(color => color.c)
   )
 
-  for (let x = widthFrom; x < widthTo; x++) {
-    let l = luminostyScale(x)
-    let c = chromaScale(x)
+  return paintSlice(
+    {
+      width,
+      height,
+      widthFrom,
+      widthTo,
+      showColors,
+      showP3,
+      showRec2020,
+      p3Support,
+      borderP3,
+      borderRec2020,
+      lch2xyz,
+    },
+    (pixels, columnX) => {
+      const x = widthFrom + columnX
+      const l = luminostyScale(x)
+      const c = chromaScale(x)
 
-    let wasInSRGB = false
-
-    for (let y = height; y >= 0; y--) {
-      let h = sycledLerp(ranges.h.max, ranges.h.min, y / height)
-      const { r, g, b, within_sRGB, within_P3, within_Rec2020 } = lch2color([l, c, h])
-
-      const dx = x - widthFrom
-      if (within_sRGB) {
-        wasInSRGB = true
-        pixels.setPixel(dx, y, showColors ? [r, g, b, 255] : getSrgbPixel())
-      } else if (wasInSRGB && within_P3) {
-        pixels.setPixel(dx, y, P3_CONTOUR)
-        wasInSRGB = false
-      } else if (showP3 && within_P3) {
-        pixels.setPixel(dx, y, getP3pixel(dx, y))
-      } else if (showRec2020 && within_Rec2020) {
-        pixels.setPixel(dx, y, getRec2020pixel(dx, y))
-      } else {
-        wasInSRGB = false
-      }
+      paintChartColumn({
+        pixels,
+        columnX,
+        height,
+        block: 2,
+        hasGaps: false,
+        showP3,
+        showRec2020,
+        p3Support,
+        showColors,
+        borderP3,
+        borderRec2020,
+        lch2xyz,
+        sampleLch: y => {
+          const h = sycledLerp(ranges.h.max, ranges.h.min, y / height)
+          return [l, c, h]
+        },
+      })
     }
-  }
-
-  return bakeBitmap(pixels)
+  )
 }
 
 async function bakeBitmap(pixels: Pixels) {
-  /* Copy so ImageData receives a clamped buffer typed as plain ArrayBuffer (TS DOM lib mismatch). */
   const data = Uint8ClampedArray.from(pixels.array)
   const imageData = new ImageData(data, pixels.width, pixels.height)
 
-  // Safari has very sketchy ImageBitmap implementation
-  // eslint-disable-next-line no-restricted-globals
   if ('createImageBitmap' in self) {
-    // if super-sampling becomes a viable option, scaling also can be performed with bitmap options here
     return createImageBitmap(imageData)
-  } else {
-    return imageData
   }
+  return imageData
 }
 
 export const obj = { drawChromaChart, drawLuminosityChart, drawHueChart }

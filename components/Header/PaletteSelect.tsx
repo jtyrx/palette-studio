@@ -14,7 +14,15 @@ import { Trash } from '@/shared/icons/Trash'
 import { Copy } from '@/shared/icons/Copy'
 import { Edit } from '@/shared/icons/Edit'
 import { Check } from '@/shared/icons/Check'
-import * as Menu from '../DropdownMenu'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { cn } from '@/lib/utils'
 import { Button, ControlGroup, Input } from '../inputs'
 
 export const PaletteSelect = () => {
@@ -69,34 +77,41 @@ const PaletteSelectComponent = () => {
   const paletteList = useStore(paletteListStore)
   const currentIdx = useStore(paletteIdStore)
   return (
-    <Menu.Root>
-      <Menu.Trigger>
-        <Button
-          title={paletteList[currentIdx].name}
-          style={{ width: 200, justifyContent: 'space-between' }}
-        >
-          <span
-            style={{
-              minWidth: 0,
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-            }}
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            title={paletteList[currentIdx].name}
+            style={{ width: 200, justifyContent: 'space-between' }}
           >
-            {paletteList[currentIdx].name}
-          </span>
-          <ChevronDown />
-        </Button>
-      </Menu.Trigger>
+            <span
+              style={{
+                minWidth: 0,
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {paletteList[currentIdx].name}
+            </span>
+            <ChevronDown />
+          </Button>
+        }
+      />
 
-      <Menu.Content align="start" sideOffset={4}>
-        <Menu.Group>
-          <Menu.Label>Palettes</Menu.Label>
+      <DropdownMenuContent align="start" sideOffset={4} className="min-w-50">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="text-sm font-bold">
+            Palettes
+          </DropdownMenuLabel>
           {paletteList.map((p, i) => (
-            <Menu.Item
+            <DropdownMenuItem
               key={i}
-              selected={i === currentIdx}
-              onSelect={() => switchPalette(i)}
+              className={cn(
+                'cursor-pointer justify-between',
+                i === currentIdx && 'bg-accent'
+              )}
+              onClick={() => switchPalette(i)}
             >
               {p.name}
               {!p.isPreset && (
@@ -115,10 +130,10 @@ const PaletteSelectComponent = () => {
                   />
                 </span>
               )}
-            </Menu.Item>
+            </DropdownMenuItem>
           ))}
-        </Menu.Group>
-      </Menu.Content>
-    </Menu.Root>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

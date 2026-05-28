@@ -1,11 +1,16 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import debounce from 'lodash/debounce'
 import { useStore } from '@nanostores/react'
 import type { Channel, spaceName, TColor } from '@/shared/types'
 import { paletteStore } from '@/store/palette'
 import { chartSettingsStore } from '@/store/chartSettings'
+import {
+  getDevicePixelRatio,
+  readChartBorderColors,
+  supportsDisplayP3,
+} from '@/shared/chart/canvasSupport'
 
 import {
   channelFuncs,
@@ -19,6 +24,7 @@ import { drawImageOnCanvasSafe } from './drawImageOnCanvasSafe'
 
 /** 100 is kind of optimal repaint ratio (1% per 'frame-column'). More areas cause more worker overhead */
 export const OPTIMAL_SPREAD_AREAS_AMOUNT = 100
+/** Render buffer uses devicePixelRatio for sharp output (see oklch-picker initCanvasSize) */
 export const SUPERSAMPLING_RATIO = 1
 
 const RENDER_STRATEGY_DEBOUNCE: { [K in RenderStrategyType]: number } = {
@@ -42,35 +48,46 @@ export function Canvas(props: {
   const settings = useStore(chartSettingsStore)
   const { mode } = useStore(paletteStore)
   const {
-    width,
-    height,
+    width: cssWidth,
+    height: cssHeight,
     channel,
     colors,
     renderStrategy = 'concurrent',
   } = props
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const [p3Support] = useState(() => supportsDisplayP3())
+
+  const pixelRatio = getDevicePixelRatio()
+  const bufferWidth = Math.max(1, Math.round(cssWidth * pixelRatio))
+  const bufferHeight = Math.max(1, Math.round(cssHeight * pixelRatio))
 
   const debouncedRepaint = useMemo(() => {
     const debounceRate = RENDER_STRATEGY_DEBOUNCE[renderStrategy]
     const renderSpread = RENDER_STRATEGY_SPREAD[renderStrategy]
 
     return debounce((paintColors: TColor[], paintMode: spaceName) => {
-      console.log('🖼 Repaint canvas')
       const canvas = canvasRef.current
-      const ctx = canvas?.getContext('2d')
+      const ctx = canvas?.getContext('2d', {
+        colorSpace: p3Support ? 'display-p3' : 'srgb',
+      } as CanvasRenderingContext2DSettings)
       if (!ctx) return
 
+      const borders = readChartBorderColors()
+
       const drawPartialImage: DrawPartialFn = (image, from, to) => {
-        ctx.clearRect(from, 0, to - from, height)
-        drawImageOnCanvasSafe(ctx, image, from, to, height)
+        ctx.clearRect(from, 0, to - from, bufferHeight)
+        drawImageOnCanvasSafe(ctx, image, from, to, bufferHeight)
       }
 
       const renderParams: ConcurrentSpreadStrategyParams = {
-        width,
-        height,
+        width: bufferWidth,
+        height: bufferHeight,
         mode: paintMode,
         colors: paintColors,
         ...settings,
+        p3Support,
+        borderP3: borders.borderP3,
+        borderRec2020: borders.borderRec2020,
         spread: renderSpread,
         scale: SUPERSAMPLING_RATIO,
       }
@@ -82,7 +99,14 @@ export function Canvas(props: {
         drawPartialImage
       )
     }, debounceRate)
-  }, [channel, height, settings, width, renderStrategy])
+  }, [
+    bufferHeight,
+    bufferWidth,
+    channel,
+    p3Support,
+    renderStrategy,
+    settings,
+  ])
 
   useEffect(() => {
     debouncedRepaint(colors, mode)
@@ -91,6 +115,7 @@ export function Canvas(props: {
       debouncedRepaint.cancel()
     }
   }, [colors, debouncedRepaint, mode])
+
   return (
     <div
       className="overflow-hidden rounded-b-lg"
@@ -104,9 +129,9 @@ export function Canvas(props: {
     >
       <canvas
         ref={canvasRef}
-        width={width}
-        height={height}
-        className="drop-shadow-[0_0_1px_var(--color-canvas-1)]"
+        width={bufferWidth}
+        height={bufferHeight}
+        className="drop-shadow-[0_0_0.0714rem_var(--color-canvas-1)]"
         style={{
           filter: settings.showColors ? undefined : 'var(--color-canvas-filter)',
         }}
