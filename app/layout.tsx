@@ -1,11 +1,10 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import './globals.css'
-import { Geist } from 'next/font/google'
+import { fontSans } from '@/app/fonts'
 import { cn } from '@/lib/utils'
+import { ThemeScript } from '@/components/theme-script'
 import { Providers } from './providers'
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
@@ -52,7 +51,18 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("h-full", "font-sans", geist.variable)}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn('h-full', 'font-sans', fontSans.variable)}
+    >
+      <head>
+        <ThemeScript
+          attribute="data-theme"
+          defaultTheme="dark"
+          disableTransitionOnChange
+        />
+      </head>
       <body className="flex h-svh min-h-0 flex-col overflow-hidden">
         <Providers>{children}</Providers>
       </body>

@@ -13,7 +13,7 @@ export function WorkbenchMain({ children }: { children: ReactNode }) {
       <section
         id="charts-panel"
         data-slot="charts-panel"
-        className="flex min-w-0 flex-1 flex-col gap-4 overflow-auto bg-(--color-surface-card) px-6 py-4"
+        className="flex min-w-0 flex-1 flex-col gap-16 overflow-auto bg-(--color-surface-card) px-24 py-16"
       >
         {children}
       </section>

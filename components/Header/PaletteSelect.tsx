@@ -123,7 +123,7 @@ const PaletteSelectComponent = () => {
             >
               {p.name}
               {!p.isPreset && (
-                <span className="flex gap-2">
+                <span className="flex gap-8">
                   <Copy
                     onClick={e => {
                       e.preventDefault()

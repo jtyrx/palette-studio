@@ -36,9 +36,9 @@ export function AppToolbar() {
   return (
     <header
       data-slot="app-toolbar"
-      className="flex min-h-(--layout-shell-toolbar-h) shrink-0 flex-wrap items-center gap-3 border-b border-hairline bg-default px-4 py-2"
+      className="flex min-h-(--layout-shell-toolbar-h) shrink-0 flex-wrap items-center gap-12 border-b border-hairline bg-default px-16 py-8"
     >
-      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-3">
+      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-12">
         <SidebarTrigger />
 
         <ColorEditor
@@ -54,7 +54,7 @@ export function AppToolbar() {
         <ColorActions />
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-8">
         <ButtonGroup orientation="horizontal">
           <Button
             type="button"

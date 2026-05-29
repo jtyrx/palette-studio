@@ -54,7 +54,7 @@ function SelectGroup({className, ...props}: SelectPrimitive.Group.Props) {
   return (
     <SelectPrimitive.Group
       data-slot="select-group"
-      className={cn('scroll-my-4 p-4', className)}
+      className={cn('scroll-my-16 p-16', className)}
       {...props}
     />
   )
@@ -184,7 +184,7 @@ function SelectSeparator({
   return (
     <SelectPrimitive.Separator
       data-slot="select-separator"
-      className={cn('pointer-events-none -mx-4 my-4 h-px bg-border', className)}
+      className={cn('pointer-events-none -mx-16 my-16 h-px bg-border', className)}
       {...props}
     />
   )

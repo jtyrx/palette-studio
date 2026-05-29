@@ -29,21 +29,23 @@ pnpm vitest run shared/colorDisplay.test.ts
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 16 · App Router · Turbopack |
-| Language | TypeScript 5 · strict mode |
-| Styling | Tailwind CSS v4 · CSS-first (`@theme`, `@utility`, no `tailwind.config.*`) |
-| UI primitives | `@base-ui/react` · shadcn-style wrappers in `components/ui/` |
-| State | `nanostores` + `@nanostores/persistent` + `@nanostores/react` |
-| Color math | `colorjs.io` (primary) + `chroma-js` (WCAG 2.1 ratio only) |
-| Contrast | `apca-w3` for APCA · `chroma.contrast` for WCAG 2.1 |
-| Theme | `next-themes` · `attribute="data-theme"` · default `"dark"` |
-| Persistence | `@nanostores/persistent` (localStorage key: `palette`) · lz-string URL share (read-once, cleaned) |
-| Package manager | `pnpm` |
-| Testing | `vitest` + `@testing-library/react` |
-| Icons | `lucide-react` |
-| Animations | `tw-animate-css` |
+
+| Layer           | Technology                                                                                        |
+| --------------- | ------------------------------------------------------------------------------------------------- |
+| Framework       | Next.js 16 · App Router · Turbopack                                                               |
+| Language        | TypeScript 5 · strict mode                                                                        |
+| Styling         | Tailwind CSS v4 · CSS-first (`@theme`, `@utility`, no `tailwind.config.*`)                        |
+| UI primitives   | `@base-ui/react` · shadcn-style wrappers in `components/ui/`                                      |
+| State           | `nanostores` + `@nanostores/persistent` + `@nanostores/react`                                     |
+| Color math      | `colorjs.io` (primary) + `chroma-js` (WCAG 2.1 ratio only)                                        |
+| Contrast        | `apca-w3` for APCA · `chroma.contrast` for WCAG 2.1                                               |
+| Theme           | In-repo `@/components/theme-provider` · `attribute="data-theme"` · default `"dark"` · blocking `<head>` script |
+| Persistence     | `@nanostores/persistent` (localStorage key: `palette`) · lz-string URL share (read-once, cleaned) |
+| Package manager | `pnpm`                                                                                            |
+| Testing         | `vitest` + `@testing-library/react`                                                               |
+| Icons           | `lucide-react`                                                                                    |
+| Animations      | `tw-animate-css`                                                                                  |
+
 
 ---
 
@@ -64,7 +66,7 @@ No additional routes. Do not add routes without explicit approval.
 
 ```
 layout.tsx
-  ThemeProvider (next-themes, data-theme attribute)
+  ThemeProvider (bespoke, data-theme attribute)
     PaletteStudioLoader
       PaletteStudioClient  ← 'use client' boundary
         App
@@ -87,6 +89,7 @@ layout.tsx
 All colors are `TColor` (`shared/types.ts`): LCH channels (`l`, `c`, `h`), pre-computed RGB (`r`, `g`, `b`), hex, gamut flags (`within_sRGB`, `within_P3`, `within_Rec2020`), and active `mode` (`oklch` | `cielch`). `TLchModel` describes a color space with channel ranges and converter functions.
 
 Color math:
+
 - `shared/color.ts` — APCA, WCAG, ΔE contrast utilities
 - `shared/colorFuncs/colorModels.ts` — TLchModel definitions for CIE LCH and OKLCH
 - `shared/colorFuncs/index.ts` — `colorSpaces` map, `lch2color` entry point
@@ -115,6 +118,7 @@ savedPalettesStore (persistentAtom → localStorage key: "palette")
 ### The 6 Graphs
 
 `components/ColorGraph/` renders six interactive `<Scale>` charts — L, C, H channels × "stop" axis (across tones) and "hue" axis (across hues). Each chart:
+
 - Renders a background gamut visualization via `WorkerPool` (comlink, OffscreenCanvas)
 - Shows draggable points for each swatch in the current palette slice
 - Writes back to `paletteStore` on drag
@@ -130,7 +134,7 @@ Do not break the 6 graphs, drag handlers, or P3 contour without explicit approva
 
 - **Tailwind v4** with canonical CSS variable utilities — no `[var(--...)]` bracket syntax
 - Three-tier OKLCH token system in `app/globals.css`: primitive tokens → semantic tokens → component tokens
-- **next-themes** wraps the app in `app/providers.tsx` via `attribute="data-theme"`, default `"dark"`
+- **Theme** — `ThemeScript` in `app/layout.tsx` `<head>` (zero-flash) + `ThemeProvider` in `app/providers.tsx` via `attribute="data-theme"`, default `"dark"`
 - Responsive breakpoint: `md` (768px) — left panel goes full-width below this
 
 ---
@@ -140,15 +144,36 @@ Do not break the 6 graphs, drag handlers, or P3 contour without explicit approva
 `app/globals.css` is the single source of truth for all design tokens. Never add tokens elsewhere.
 
 ### Tier 1 — primitives (`@theme`)
+
 Raw OKLCH values: color scale, spacing, radius, type steps. Named `--color-<name>-<step>`.
 
 ### Tier 2 — semantic aliases (`:root` / `[data-theme="dark"]`)
+
 Role-based tokens: `--color-surface-default`, `--color-text-primary`, `--color-border-subtle`, etc.
 
 ### Tier 3 — Tailwind bridge (`@theme inline`)
+
 Maps semantic tokens to Tailwind utility classes.
 
+### The 1px Spacing Rule
+
+`--spacing: 0.0625rem` is set in `@theme`. This overrides Tailwind's default `0.25rem` base unit.
+
+**Every spacing step = 1px.** `p-4` = 4px, `gap-16` = 16px, `w-64` = 64px.
+
+This is intentional — the neutral-system design language uses pixel-direct sizing for dense UI. When writing layout, reason in pixels and use that number directly as the utility value. Do not apply the standard Tailwind 4× multiplier.
+
+Named widget sizes (defined in `@theme` as `--spacing-widget-*`) also use this scale:
+- `--spacing-widget-xs` = `--spacing(19)` = 19px
+- `--spacing-widget-sm` = `--spacing(25)` = 25px
+- `--spacing-widget-md` = `--spacing(35)` = 35px
+- `--spacing-widget-lg` = `--spacing(45)` = 45px
+- `--spacing-widget-xl` = `--spacing(73)` = 73px
+
+Use `size-widget-md` (etc.) for interactive control heights — never hardcode pixel values.
+
 ### Rules
+
 - **No HSL anywhere.** All color values in `oklch()` or `color(display-p3 ...)`.
 - Dark mode via `[data-theme="dark"]` selector only. Never `@media (prefers-color-scheme)` as primary. Never `.dark` class.
 - Never write CSS custom properties outside `globals.css` except component-scoped animation keyframes.
@@ -162,24 +187,26 @@ Maps semantic tokens to Tailwind utility classes.
   - ✅ `import { paletteStore } from '@/store/palette/stores'`
   - ❌ `import { paletteStore } from '@/store/palette'`
 - **Type-only barrels are allowed:** `import type { Palette } from '@/shared/types'`
-- **`components/ui/` is flat** — no subdirectories. **File names are kebab-case** (`button.tsx`, `dropdown-menu.tsx`), matching neutral-system / portfolio conventions.
+- `**components/ui/` is flat** — no subdirectories. **File names are kebab-case** (`button.tsx`, `dropdown-menu.tsx`), matching neutral-system / portfolio conventions.
 - **Buttons:** always `import { Button } from '@/components/ui/button'` (`@base-ui/react` primitive). Do not add a second app `Button` in feature components.
 - **Legacy form primitives** (`Input`, `Select`, `TextArea`, `ControlGroup`) live in `components/Inputs.tsx` until migrated into `components/ui/`.
-- **`@/` resolves to the project root** (not `src/`). Active code lives at repo root; exclude retired `src/` from tooling if it reappears.
+- `**@/` resolves to the project root** (not `src/`). Active code lives at repo root; exclude retired `src/` from tooling if it reappears.
 
 ---
 
 ## Color Library Rules
 
-| Task | Use |
-|---|---|
-| WCAG 2.1 contrast ratio | `chroma.contrast(bg, text)` — do not switch |
-| APCA contrast | `APCAcontrast` from `apca-w3` + colorjs.io for hex→sRGB |
-| ΔE (CIE76) | `chroma.deltaE(bg, text)` — label as "ΔE CIE76" in UI |
-| Gamut detection | `color.inGamut('srgb')`, `color.inGamut('p3')` from colorjs.io |
-| CSS Color 4 output | `color.toString({format: 'oklch'})` from colorjs.io |
-| Color construction in workers | `new Color('oklch', [l, c, h])` — Worker-safe |
-| Do not use | `chroma.deltaE`, `chroma.valid`, `chroma(hex).rgb()` — replaced by colorjs.io |
+
+| Task                          | Use                                                                           |
+| ----------------------------- | ----------------------------------------------------------------------------- |
+| WCAG 2.1 contrast ratio       | `chroma.contrast(bg, text)` — do not switch                                   |
+| APCA contrast                 | `APCAcontrast` from `apca-w3` + colorjs.io for hex→sRGB                       |
+| ΔE (CIE76)                    | `chroma.deltaE(bg, text)` — label as "ΔE CIE76" in UI                         |
+| Gamut detection               | `color.inGamut('srgb')`, `color.inGamut('p3')` from colorjs.io                |
+| CSS Color 4 output            | `color.toString({format: 'oklch'})` from colorjs.io                           |
+| Color construction in workers | `new Color('oklch', [l, c, h])` — Worker-safe                                 |
+| Do not use                    | `chroma.deltaE`, `chroma.valid`, `chroma(hex).rgb()` — replaced by colorjs.io |
+
 
 ---
 
@@ -207,15 +234,17 @@ Maps semantic tokens to Tailwind utility classes.
 
 All structural changes require a Plan Mode gate before the first commit in that phase.
 
-| Change type | Gate required |
-|---|---|
-| Moving files or directories | Yes |
-| Adding or removing dependencies | Yes |
-| Changing globals.css token system | Yes |
-| Modifying the store shape | Yes |
-| Changing graph rendering behavior | Yes |
-| Updating tsconfig / vitest / components.json | Yes |
+
+| Change type                                  | Gate required      |
+| -------------------------------------------- | ------------------ |
+| Moving files or directories                  | Yes                |
+| Adding or removing dependencies              | Yes                |
+| Changing globals.css token system            | Yes                |
+| Modifying the store shape                    | Yes                |
+| Changing graph rendering behavior            | Yes                |
+| Updating tsconfig / vitest / components.json | Yes                |
 | UI-only additions (new badge, new component) | No, but flag in PR |
+
 
 Do not proceed past a gate without explicit user approval.
 
@@ -233,6 +262,7 @@ pnpm lint                   # zero ESLint errors, zero warnings
 ```
 
 Runtime checks after `pnpm dev`:
+
 - No `console.error` in the browser console
 - No unhandled promise rejections
 - Light/dark toggle works without flash
@@ -245,12 +275,14 @@ Runtime checks after `pnpm dev`:
 
 Desktop UX at `xl` (1280px+) is the floor. Never regress it.
 
-| Breakpoint | Palette grid | 6 Graphs | Contrast panel |
-|---|---|---|---|
-| xl+ | Full grid | 2-col flex row | Beside graphs |
-| lg (1024px) | Full grid | 3×2 stack | Below graphs |
-| md (768px) | `overflow-x: auto` | 1-col stack | Below graphs |
-| sm (640px) | `overflow-x: auto` | 1-col stack | Collapsed |
+
+| Breakpoint  | Palette grid       | 6 Graphs       | Contrast panel |
+| ----------- | ------------------ | -------------- | -------------- |
+| xl+         | Full grid          | 2-col flex row | Beside graphs  |
+| lg (1024px) | Full grid          | 3×2 stack      | Below graphs   |
+| md (768px)  | `overflow-x: auto` | 1-col stack    | Below graphs   |
+| sm (640px)  | `overflow-x: auto` | 1-col stack    | Collapsed      |
+
 
 Graph knobs are `<input type="range">` — pointer events fire on touch natively.
 
@@ -260,11 +292,13 @@ Graph knobs are `<input type="range">` — pointer events fire on touch natively
 
 ## Persistence Keys
 
-| Key | Store | Format |
-|---|---|---|
-| `palette` | `savedPalettesStore` | JSON array of `HexPalette` |
-| `theme` | next-themes | `'light'` or `'dark'` |
-| `p` (URL query param) | lz-string URL share | Compressed JSON, read-once on mount |
+
+| Key                   | Store                | Format                              |
+| --------------------- | -------------------- | ----------------------------------- |
+| `palette`             | `savedPalettesStore` | JSON array of `HexPalette`          |
+| `theme`               | `localStorage` (`theme` key) | `'light'`, `'dark'`, or `'system'` |
+| `p` (URL query param) | lz-string URL share  | Compressed JSON, read-once on mount |
+
 
 Schema-version the localStorage key (`_v1`, `_v2`) whenever the `HexPalette` shape changes.
 
@@ -272,15 +306,17 @@ Schema-version the localStorage key (`_v1`, `_v2`) whenever the `HexPalette` sha
 
 ## Key Libraries
 
-| Library | Role |
-|---|---|
-| `colorjs.io` | Gamut checks, P3 rendering, color parsing |
-| `chroma-js` | WCAG contrast, ΔE, interpolation helpers |
-| `apca-w3` | APCA contrast (Lc values) |
-| `comlink` | OffscreenCanvas worker bridge |
-| `nanostores` + `@nanostores/persistent` | Reactive state + localStorage |
-| `@base-ui/react` | Headless UI primitives |
-| `lz-string` | URL palette compression |
+
+| Library                                 | Role                                      |
+| --------------------------------------- | ----------------------------------------- |
+| `colorjs.io`                            | Gamut checks, P3 rendering, color parsing |
+| `chroma-js`                             | WCAG contrast, ΔE, interpolation helpers  |
+| `apca-w3`                               | APCA contrast (Lc values)                 |
+| `comlink`                               | OffscreenCanvas worker bridge             |
+| `nanostores` + `@nanostores/persistent` | Reactive state + localStorage             |
+| `@base-ui/react`                        | Headless UI primitives                    |
+| `lz-string`                             | URL palette compression                   |
+
 
 ---
 
@@ -316,7 +352,7 @@ This project is actively worked on in Cursor Composer, primarily for UI changes.
 
 ### Tailwind v4 in Cursor
 
-- All utility classes use canonical CSS variable syntax — `bg-surface-default`, not `bg-[var(--color-surface-default)]`
+- All utility classes use canonical CSS variable syntax — `bg-surface-default`, not `bg-[var(--color-surface-default)]f`
 - Color tokens live in `app/globals.css` under `@theme inline`. Do not inline color values in components.
 - When adding a new UI element, reference existing token names from `globals.css` — don't invent new ones.
 
@@ -344,3 +380,4 @@ This project is actively worked on in Cursor Composer, primarily for UI changes.
 - Adding a new display-only component that reads but doesn't write state
 - Fixing TypeScript errors or lint warnings
 - Copy/label changes
+

@@ -124,7 +124,7 @@ const ColorGraphAxisIndicator: FC<{ axis: 'l' | 'c' | 'h' }> = ({ axis }) => {
     >
       <span className="relative inline-block">
         <span
-          className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 w-6 rounded-(--radius-m) text-center text-(--color-text-primary) leading-6"
+          className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 w-24 rounded-(--radius-m) text-center text-(--color-text-primary) leading-24"
           style={{
             fontWeight: pressed ? 900 : undefined,
             background: pressed
@@ -137,7 +137,7 @@ const ColorGraphAxisIndicator: FC<{ axis: 'l' | 'c' | 'h' }> = ({ axis }) => {
       </span>
       {axis === 'l' && (
         <div
-          className="w-2 rounded-lg"
+          className="w-8 rounded-lg"
           style={{
             background:
               'linear-gradient(#fff, #b9b9b9, #777, #3b3b3b, #000)',
@@ -146,7 +146,7 @@ const ColorGraphAxisIndicator: FC<{ axis: 'l' | 'c' | 'h' }> = ({ axis }) => {
       )}
       {axis === 'c' && (
         <div
-          className="w-2 rounded-lg"
+          className="w-8 rounded-lg"
           style={{
             background:
               'linear-gradient(#ff00ff, #f440f3, #ea58e7, #df69dc, #d377d0, #c783c4, #bb8db8, #ad97ac, #9f9f9f)',
@@ -155,7 +155,7 @@ const ColorGraphAxisIndicator: FC<{ axis: 'l' | 'c' | 'h' }> = ({ axis }) => {
       )}
       {axis === 'h' && (
         <div
-          className="w-2 rounded-lg"
+          className="w-8 rounded-lg"
           style={{
             background:
               'linear-gradient(#e183a1, #55aee8, #9bb054, #db9152, #e183a1)',

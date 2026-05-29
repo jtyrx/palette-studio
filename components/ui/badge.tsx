@@ -4,7 +4,7 @@ import {cva, type VariantProps} from 'class-variance-authority'
 import {cn} from '@/lib/utils'
 
 const badgeBase = cn(
-  'group/badge inline-flex h-19 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-32',
+  'group/badge inline-flex h-19 w-fit shrink-0 items-center justify-center gap-4 overflow-hidden rounded-4xl border border-transparent px-8 py-2 text-xs font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-6 has-data-[icon=inline-start]:pl-6 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-32',
 )
 
 const badgeVariants = cva(badgeBase, {
@@ -24,8 +24,8 @@ const badgeVariants = cva(badgeBase, {
       disabled: 'pointer-events-none opacity-50',
     },
     size: {
-      sm: 'px-8 py-2 text-nano',
-      md: 'px-10 py-2 text-caption',
+      sm: 'px-8 py-4 text-nano',
+      md: 'px-10 py-4 text-caption',
     },
   },
   defaultVariants: {

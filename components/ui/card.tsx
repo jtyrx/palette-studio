@@ -12,7 +12,7 @@ const cardBase = cn(
 )
 
 const cardHeaderBase = cn(
-  'group/card-header @container/card-header grid auto-rows-min items-start gap-4',
+  'group/card-header @container/card-header grid auto-rows-min items-start gap-16',
   'rounded-t-xl px-16 group-data-[size=sm]/card:px-12',
   'has-data-[slot=card-action]:grid-cols-[1fr_auto]',
   'has-data-[slot=card-description]:grid-rows-[auto_auto]',

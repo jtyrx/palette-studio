@@ -22,8 +22,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider defaultOpen className="h-full min-h-0">
       <Sidebar collapsible="icon" variant="sidebar">
-        <SidebarHeader className="shrink-0 gap-2 border-b border-hairline px-3 pt-3 pb-4">
-          <div className="flex flex-col gap-2.5 group-data-[collapsible=icon]:hidden">
+        <SidebarHeader className="shrink-0 gap-8 border-b border-hairline px-12 pt-12 pb-16">
+          <div className="flex flex-col gap-10 group-data-[collapsible=icon]:hidden">
             <p className="text-sm font-semibold leading-tight tracking-tight text-default">
               Palette Studio
             </p>

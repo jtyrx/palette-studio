@@ -2,8 +2,22 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
-/* ─── Tier 1: Primitives ───────────────────────────────────────────────────── */
+@custom-variant dark (
+  &:where(
+    [data-theme='dark'], [data-theme='dark'] *,
+    [data-preview-theme='dark'], [data-preview-theme='dark'] *
+  )
+);
 
+/* globals.css structure (Tailwind v4 cascade order)
+ * 1. @import          — tailwind + plugins
+ * 2. @theme           — Tier 1 static primitives
+ * 3. :root / [data-theme="dark"]    — Tier 2 semantic tokens (theme-aware)
+ * 4. @theme inline    — Tier 3 Tailwind utility bridge
+ * 5. @layer base      — reset, document chrome, shadcn base @apply
+ * 6. @layer components — app layout / graph class hooks (utilities layer)
+ **/
+/* ─── Tier 1: Primitives ───────────────────────────────────────────────────── */
 @theme {
   /* Radius */
   --radius-m: 0.375rem;
@@ -32,16 +46,45 @@
   --text-caption: --spacing(11);
   --text-micro: 0.65rem;
   --text-nano: 0.6rem;
+
+  --color-neutral-0: oklch(100% 0 none);
+  --color-neutral-1: oklch(93.962% 0 none);
+  --color-neutral-2: oklch(87.923% 0 none);
+  --color-neutral-3: oklch(81.885% 0 none);
+  --color-neutral-4: oklch(75.846% 0 none);
+  --color-neutral-5: oklch(69.808% 0 none);
+  --color-neutral-6: oklch(63.769% 0 none);
+  --color-neutral-7: oklch(57.731% 0 none);
+  --color-neutral-8: oklch(51.692% 0 none);
+  --color-neutral-9: oklch(45.654% 0 none);
+  --color-neutral-10: oklch(39.615% 0 none);
+  --color-neutral-11: oklch(33.577% 0 none);
+  --color-neutral-12: oklch(27.538% 0 none);
+  --color-neutral-13: oklch(21.5% 0 none);
+  --color-neutral-dark-0: oklch(18% 0 none);
+  --color-neutral-dark-1: oklch(24.115% 0 none);
+  --color-neutral-dark-2: oklch(30.231% 0 none);
+  --color-neutral-dark-3: oklch(36.346% 0 none);
+  --color-neutral-dark-4: oklch(42.462% 0 none);
+  --color-neutral-dark-5: oklch(48.577% 0 none);
+  --color-neutral-dark-6: oklch(54.692% 0 none);
+  --color-neutral-dark-7: oklch(60.808% 0 none);
+  --color-neutral-dark-8: oklch(66.923% 0 none);
+  --color-neutral-dark-9: oklch(73.038% 0 none);
+  --color-neutral-dark-10: oklch(79.154% 0 none);
+  --color-neutral-dark-11: oklch(85.269% 0 none);
+  --color-neutral-dark-12: oklch(91.385% 0 none);
+  --color-neutral-dark-13: oklch(97.5% 0 none);
 }
 
 /* ─── Tier 2: Semantic aliases ─────────────────────────────────────────────── */
-/* :root = dark defaults (SSR-safe before next-themes hydrates)               */
+/* :root = dark defaults (SSR-safe before theme script hydrates)              */
 /* [data-theme="light"] = light overrides                                       */
 
 :root {
   /* Surface */
-  --color-surface-default: oklch(0.1 0.025 255);
-  --color-surface-card: oklch(0.19 0.01 255);
+  --color-surface-default: --color-neutral-dark-1;
+  --color-surface-card: --color-neutral-dark-2;
 
   /* Text */
   --color-text-primary: oklch(1 0 0);
@@ -135,11 +178,7 @@
     var(--color-text-default) 18%,
     transparent
   );
-  --chrome-chip: color-mix(
-    in oklch,
-    var(--color-text-default) 6%,
-    transparent
-  );
+  --chrome-chip: color-mix(in oklch, var(--color-text-default) 6%, transparent);
   --chrome-field: color-mix(
     in oklch,
     var(--color-text-default) 4%,
@@ -235,7 +274,10 @@
 /* ─── Tier 3: Tailwind bridge ──────────────────────────────────────────────── */
 
 @theme inline {
+  /* Typography */
   --font-sans: var(--font-sans);
+
+  /* shadcn color utilities */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -262,6 +304,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* shadcn radius scale */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -326,7 +370,271 @@
       color-mix(in oklch, var(--color-text-default) 8%, transparent);
 }
 
-/* neutral-system button + menu utilities */
+/* ─── Layer: base ──────────────────────────────────────────────────────────── */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    @apply border-border outline-ring/50;
+  }
+
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  figure,
+  blockquote,
+  dl,
+  dd,
+  button {
+    margin: 0;
+  }
+
+  ul[role='list'],
+  ol[role='list'] {
+    list-style: none;
+  }
+
+  html:focus-within {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+    @apply bg-background text-foreground;
+  }
+
+  a:not([class]) {
+    text-decoration-skip-ink: auto;
+  }
+
+  img,
+  picture {
+    max-width: 100%;
+    display: block;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html:focus-within {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  html {
+    height: 100%;
+    min-height: 100%;
+    color: var(--color-text-primary);
+    background: var(--color-surface-default);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    @apply font-sans;
+  }
+
+  body {
+    height: 100%;
+    min-height: 100%;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: var(--color-surface-default);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-scrollbar);
+    border-radius: 0.375rem;
+    border: 0.125rem solid var(--color-surface-default);
+  }
+}
+
+/* ─── Layer: components ────────────────────────────────────────────────────── */
+
+@layer components {
+  [data-slot='app-toolbar'] .btn-sys {
+    text-transform: none;
+  }
+
+  .color-graph-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr) var(--chart-axis-gap) minmax(0, 1fr);
+  }
+
+  @media (max-width: 860px) {
+    .color-graph-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .color-graph-axis {
+      display: none;
+    }
+  }
+
+  .color-graph-scale {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: var(--chart-width);
+  }
+
+  .color-graph-chart {
+    position: relative;
+    width: 100%;
+    height: var(--chart-height);
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+  }
+
+  .color-graph-chart canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .graph-value-input {
+    text-align: center;
+    font-size: 0.857rem;
+    line-height: 1.429rem;
+    padding: 0;
+    min-width: 0;
+    flex: 1 0;
+    border: 0.125rem solid transparent;
+    -moz-appearance: textfield;
+  }
+
+  .graph-value-input:first-child {
+    border-radius: 0.5rem 0 0 0;
+  }
+
+  .graph-value-input:last-child {
+    border-radius: 0 0.5rem 0 0;
+  }
+
+  .graph-value-input:focus {
+    outline: none;
+    border-color: var(--color-text-contrasting);
+  }
+
+  .graph-value-input::-webkit-outer-spin-button,
+  .graph-value-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .graph-knob {
+    position: absolute;
+    width: calc(var(--chart-height) + var(--chart-knob-padding));
+    height: 0.0625rem;
+    bottom: -0.5rem;
+    transform: translateX(0.0357rem) rotate(-90deg);
+    transform-origin: bottom left;
+    margin: 0;
+    background-color: transparent;
+    -webkit-appearance: none;
+    --track-size: var(--chart-height);
+  }
+
+  .graph-knob:focus {
+    outline: none;
+  }
+
+  .graph-knob::-webkit-slider-runnable-track {
+    border: 0;
+    height: 0.0625rem;
+    background: linear-gradient(var(--track), var(--track));
+    background-size: var(--track-size);
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .graph-knob::-moz-range-track {
+    border: 0;
+    height: 0.0625rem;
+    background: linear-gradient(var(--track), var(--track));
+    background-size: var(--track-size);
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .graph-knob::-webkit-slider-thumb {
+    box-sizing: border-box;
+    margin-top: -0.4375rem;
+    width: 0.9375rem;
+    height: 0.9375rem;
+    background: transparent;
+    border-radius: 0.8125rem;
+    box-shadow: 0 0 0.125rem 0 var(--contrast, gray);
+    cursor: grab;
+    transition: 100ms ease-in-out;
+    -webkit-appearance: none;
+  }
+
+  .graph-knob::-moz-range-thumb {
+    box-sizing: border-box;
+    margin-top: -0.4375rem;
+    width: 0.9375rem;
+    height: 0.9375rem;
+    background: transparent;
+    border-radius: 0.8125rem;
+    box-shadow: -0.1875rem 0 0.25rem 0 rgb(0 0 0 / 0.2);
+    cursor: grab;
+    transition: 100ms ease-in-out;
+  }
+
+  .graph-knob::-webkit-slider-thumb:active,
+  .graph-knob::-moz-range-thumb:active {
+    cursor: grabbing;
+  }
+
+  .graph-knob[data-selected='true']::-webkit-slider-thumb {
+    transform: scale(1);
+    border: 0.3125rem solid var(--bg, gray);
+  }
+
+  .graph-knob[data-selected='false']::-webkit-slider-thumb {
+    transform: scale(0.75);
+    border: 0.5rem solid var(--bg, gray);
+  }
+
+  .graph-knob[data-selected='true']::-moz-range-thumb {
+    transform: scale(1);
+    border: 0.3125rem solid var(--bg, gray);
+  }
+
+  .graph-knob[data-selected='false']::-moz-range-thumb {
+    transform: scale(0.75);
+    border: 0.5rem solid var(--bg, gray);
+  }
+}
+
+/* ─── Layer: utilities (@utility) ──────────────────────────────────────────── */
+
 @utility btn-sys {
   display: inline-flex;
   cursor: pointer;
@@ -534,277 +842,5 @@
   &:disabled {
     pointer-events: none;
     opacity: 0.5;
-  }
-}
-
-[data-slot='app-toolbar'] .btn-sys {
-  text-transform: none;
-}
-
-/* ─── Base reset ───────────────────────────────────────────────────────────── */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body,
-h1,
-h2,
-h3,
-h4,
-p,
-figure,
-blockquote,
-dl,
-dd,
-button {
-  margin: 0;
-}
-
-ul[role='list'],
-ol[role='list'] {
-  list-style: none;
-}
-
-html:focus-within {
-  scroll-behavior: smooth;
-}
-
-body {
-  min-height: 100vh;
-  text-rendering: optimizeSpeed;
-  line-height: 1.5;
-}
-
-a:not([class]) {
-  text-decoration-skip-ink: auto;
-}
-
-img,
-picture {
-  max-width: 100%;
-  display: block;
-}
-
-input,
-button,
-textarea,
-select {
-  font: inherit;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html:focus-within {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-html {
-  font-size: 14px;
-  color: var(--color-text-primary);
-  background: var(--color-surface-default);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-html,
-body {
-  height: 100%;
-  min-height: 100%;
-}
-
-::-webkit-scrollbar {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-::-webkit-scrollbar-corner {
-  background: var(--color-surface-default);
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--color-scrollbar);
-  border-radius: 0.375rem;
-  border: 0.125rem solid var(--color-surface-default);
-}
-
-/* ─── Color graph layout ───────────────────────────────────────────────────── */
-
-.color-graph-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: minmax(0, 1fr) var(--chart-axis-gap) minmax(0, 1fr);
-}
-
-@media (max-width: 860px) {
-  .color-graph-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .color-graph-axis {
-    display: none;
-  }
-}
-
-.color-graph-scale {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: var(--chart-width);
-}
-
-.color-graph-chart {
-  position: relative;
-  width: 100%;
-  height: var(--chart-height);
-  margin: 0;
-  padding: 0;
-  line-height: 0;
-}
-
-.color-graph-chart canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-/* ─── Graph controls ───────────────────────────────────────────────────────── */
-
-.graph-value-input {
-  text-align: center;
-  font-size: 0.857rem;
-  line-height: 1.429rem;
-  padding: 0;
-  min-width: 0;
-  flex: 1 0;
-  border: 0.125rem solid transparent;
-  -moz-appearance: textfield;
-}
-
-.graph-value-input:first-child {
-  border-radius: 0.5rem 0 0 0;
-}
-
-.graph-value-input:last-child {
-  border-radius: 0 0.5rem 0 0;
-}
-
-.graph-value-input:focus {
-  outline: none;
-  border-color: var(--color-text-contrasting);
-}
-
-.graph-value-input::-webkit-outer-spin-button,
-.graph-value-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.graph-knob {
-  position: absolute;
-  width: calc(var(--chart-height) + var(--chart-knob-padding));
-  height: 0.0625rem;
-  bottom: -0.5rem;
-  transform: translateX(0.0357rem) rotate(-90deg);
-  transform-origin: bottom left;
-  margin: 0;
-  background-color: transparent;
-  -webkit-appearance: none;
-  --track-size: var(--chart-height);
-}
-
-.graph-knob:focus {
-  outline: none;
-}
-
-.graph-knob::-webkit-slider-runnable-track {
-  border: 0;
-  height: 0.0625rem;
-  background: linear-gradient(var(--track), var(--track));
-  background-size: var(--track-size);
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.graph-knob::-moz-range-track {
-  border: 0;
-  height: 0.0625rem;
-  background: linear-gradient(var(--track), var(--track));
-  background-size: var(--track-size);
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.graph-knob::-webkit-slider-thumb {
-  box-sizing: border-box;
-  margin-top: -0.4375rem;
-  width: 0.9375rem;
-  height: 0.9375rem;
-  background: transparent;
-  border-radius: 0.8125rem;
-  box-shadow: 0 0 0.125rem 0 var(--contrast, gray);
-  cursor: grab;
-  transition: 100ms ease-in-out;
-  -webkit-appearance: none;
-}
-
-.graph-knob::-moz-range-thumb {
-  box-sizing: border-box;
-  margin-top: -0.4375rem;
-  width: 0.9375rem;
-  height: 0.9375rem;
-  background: transparent;
-  border-radius: 0.8125rem;
-  box-shadow: -0.1875rem 0 0.25rem 0 rgb(0 0 0 / 0.2);
-  cursor: grab;
-  transition: 100ms ease-in-out;
-}
-
-.graph-knob::-webkit-slider-thumb:active,
-.graph-knob::-moz-range-thumb:active {
-  cursor: grabbing;
-}
-
-.graph-knob[data-selected='true']::-webkit-slider-thumb {
-  transform: scale(1);
-  border: 0.3125rem solid var(--bg, gray);
-}
-
-.graph-knob[data-selected='false']::-webkit-slider-thumb {
-  transform: scale(0.75);
-  border: 0.5rem solid var(--bg, gray);
-}
-
-.graph-knob[data-selected='true']::-moz-range-thumb {
-  transform: scale(1);
-  border: 0.3125rem solid var(--bg, gray);
-}
-
-.graph-knob[data-selected='false']::-moz-range-thumb {
-  transform: scale(0.75);
-  border: 0.5rem solid var(--bg, gray);
-}
-
-/* ─── Tailwind base layer ──────────────────────────────────────────────────── */
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
   }
 }

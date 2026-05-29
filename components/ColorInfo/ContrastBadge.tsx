@@ -16,13 +16,13 @@ export const ContrastBadgeAPCA: FC<{
       className="flex flex-col rounded-(--radius-m) bg-(--color-surface-card) text-center"
     >
       <span
-        className="w-full rounded-(--radius-m) leading-10 shadow-[inset_0_0_0_1px_(--color-border-subtle)]"
+        className="w-full rounded-(--radius-m) leading-40 shadow-[inset_0_0_0_1px_(--color-border-subtle)]"
         style={{ background, color }}
       >
         APCA
       </span>
       <span
-        className="p-2 text-sm leading-5"
+        className="p-8 text-sm leading-5"
         style={{ color: getAPCAColor(cr) }}
       >
         <strong>{cr}</strong> – {getAPCAComment(cr)}
@@ -43,13 +43,13 @@ export const ContrastBadgeWCAG: FC<{ background: string; color: string }> = ({
       className="flex flex-col rounded-(--radius-m) bg-(--color-surface-card) text-center"
     >
       <span
-        className="w-full rounded-(--radius-m) leading-10 shadow-[inset_0_0_0_1px_(--color-border-subtle)]"
+        className="w-full rounded-(--radius-m) leading-40 shadow-[inset_0_0_0_1px_(--color-border-subtle)]"
         style={{ background, color }}
       >
         WCAG
       </span>
       <span
-        className="p-2 text-sm leading-5"
+        className="p-8 text-sm leading-5"
         style={{ color: getWCAGColor(cr) }}
       >
         <strong>{displayCr}</strong> – {getWCAGComment(cr)}
@@ -67,7 +67,7 @@ export const ContrastBadgeDeltaE: FC<{ background: string; color: string }> = ({
   return (
     <div
       data-slot="contrast-badge-delta-e"
-      className="col-span-full flex items-center gap-3 rounded-(--radius-m) bg-(--color-surface-card) px-3 py-2 text-sm"
+      className="col-span-full flex items-center gap-12 rounded-(--radius-m) bg-(--color-surface-card) px-12 py-8 text-sm"
     >
       <span className="text-(--color-text-hint)">ΔE CIE76</span>
       <strong style={{ color: getDeltaEColor(cr) }}>{displayCr}</strong>

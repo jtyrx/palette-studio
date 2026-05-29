@@ -32,7 +32,7 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
   }
 
   const channelNumClass = cn(
-    'channel-input h-8 w-20 border-0 bg-transparent py-0 pl-6 pr-2 text-sm',
+    'channel-input h-(--spacing-widget-sm) w-80 border-0 bg-transparent py-0 pl-24 pr-8 text-sm',
     '[-moz-appearance:textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none',
     '[&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none'
   )
@@ -40,7 +40,7 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
   return (
     <ButtonGroup orientation="horizontal" className="max-w-full overflow-x-auto">
       <label className="relative isolate flex shrink-0">
-        <span className="pointer-events-none absolute top-1/2 left-2 z-10 -translate-y-1/2 text-xs text-muted-foreground">
+        <span className="pointer-events-none absolute top-1/2 left-8 z-10 -translate-y-1/2 text-xs text-muted-foreground">
           L
         </span>
         <Input
@@ -55,7 +55,7 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
         />
       </label>
       <label className="relative isolate flex shrink-0">
-        <span className="pointer-events-none absolute top-1/2 left-2 z-10 -translate-y-1/2 text-xs text-muted-foreground">
+        <span className="pointer-events-none absolute top-1/2 left-8 z-10 -translate-y-1/2 text-xs text-muted-foreground">
           C
         </span>
         <Input
@@ -70,7 +70,7 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
         />
       </label>
       <label className="relative isolate flex shrink-0">
-        <span className="pointer-events-none absolute top-1/2 left-2 z-10 -translate-y-1/2 text-xs text-muted-foreground">
+        <span className="pointer-events-none absolute top-1/2 left-8 z-10 -translate-y-1/2 text-xs text-muted-foreground">
           H
         </span>
         <Input
@@ -86,7 +86,7 @@ export const ColorEditor: FC<ColorEditorProps> = ({ color, onChange }) => {
       </label>
       <Input
         variant="workbench"
-        className="h-8 w-24 shrink-0"
+        className="h-(--spacing-widget-sm) w-96 shrink-0"
         value={colorInput}
         style={{ color: within_sRGB ? undefined : 'var(--color-text-error)' }}
         onFocus={() => setIsFocused(true)}

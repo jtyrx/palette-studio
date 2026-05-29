@@ -23,7 +23,7 @@ const popoverSizeClass: Record<'sm' | 'default' | 'lg' | 'auto', string> = {
   auto: '',
 }
 
-const popoverHeaderBase = 'flex flex-col gap-2'
+const popoverHeaderBase = 'flex flex-col gap-8'
 const popoverTitleBase = 'font-normal'
 const popoverDescriptionBase = 'text-muted-foreground'
 
