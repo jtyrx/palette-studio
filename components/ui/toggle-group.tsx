@@ -10,8 +10,8 @@ import {cn} from '@/lib/utils'
 const toggleGroupVariants = cva('flex', {
   variants: {
     variant: {
-      default: 'gap-4',
-      outline: 'rounded-md border border-input p-2 gap-2',
+      default: 'gap-16',
+      outline: 'rounded-md border border-input p-8 gap-8',
     },
   },
   defaultVariants: {variant: 'default'},

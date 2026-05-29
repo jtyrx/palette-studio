@@ -5,7 +5,7 @@ import { FC } from 'react'
 import { CSSExportButton, TokenExportButton } from './ExportButtons'
 
 export const Help: FC = () => (
-  <div className="mt-6">
+  <div className="mt-24">
     <ExportsSection />
     <HotkeysSection />
     <CreditsSection />
@@ -13,10 +13,10 @@ export const Help: FC = () => (
 )
 
 const ExportsSection: FC = () => (
-  <section className="mb-6 text-base">
+  <section className="mb-24 text-base">
     <h3 className="text-base font-bold">Exports</h3>
 
-    <p className="mt-3 max-w-[60ch]">
+    <p className="mt-12 max-w-[60ch]">
       <strong>Figma.</strong> Install{' '}
       <a
         className="text-inherit underline decoration-(--color-text-secondary) hover:text-(--color-text-primary) hover:no-underline"
@@ -26,10 +26,10 @@ const ExportsSection: FC = () => (
       </a>
       . Run the plugin and open JSON tab. Copy tokens and paste there.
     </p>
-    <p className="mt-3 max-w-[60ch]">
+    <p className="mt-12 max-w-[60ch]">
       <TokenExportButton />
     </p>
-    <p className="mt-3 max-w-[60ch]">
+    <p className="mt-12 max-w-[60ch]">
       <CSSExportButton />
     </p>
   </section>
@@ -42,9 +42,9 @@ function metaKeyLabel() {
 
 const HotkeysSection = () => {
   return (
-    <section className="mb-6 text-base">
+    <section className="mb-24 text-base">
       <h3 className="text-base font-bold">Hotkeys</h3>
-      <ul className="pl-0 [&>li]:mt-3 [&>li:first-child]:mt-0" role="list">
+      <ul className="pl-0 [&>li]:mt-12 [&>li:first-child]:mt-0" role="list">
         <li>
           <Key>1</Key> - <Key>9</Key> — switch palette
         </li>
@@ -102,9 +102,9 @@ const HotkeysSection = () => {
 }
 
 const CreditsSection = () => (
-  <section className="mb-6 text-base">
+  <section className="mb-24 text-base">
     <h3 className="text-base font-bold">Credits</h3>
-    <p className="mt-3 max-w-[60ch]">
+    <p className="mt-12 max-w-[60ch]">
       Palette Studio is based on{' '}
       <a
         className="text-inherit underline decoration-(--color-text-secondary) hover:text-(--color-text-primary) hover:no-underline"
@@ -121,7 +121,7 @@ const CreditsSection = () => (
       </a>{' '}
       (MIT).
     </p>
-    <p className="mt-3 max-w-[60ch]">
+    <p className="mt-12 max-w-[60ch]">
       The original app is heavily inspired by{' '}
       <a
         className="text-inherit underline decoration-(--color-text-secondary) hover:text-(--color-text-primary) hover:no-underline"
@@ -138,7 +138,7 @@ const CreditsSection = () => (
       </a>{' '}
       library under the hood.
     </p>
-    <p className="mt-3 max-w-[60ch]">
+    <p className="mt-12 max-w-[60ch]">
       Special thanks for{' '}
       <a
         className="text-inherit underline decoration-(--color-text-secondary) hover:text-(--color-text-primary) hover:no-underline"
@@ -156,7 +156,7 @@ const CreditsSection = () => (
       and the CSS working group for providing all the essential code for color
       conversions.
     </p>
-    <p className="mt-3 max-w-[60ch]">
+    <p className="mt-12 max-w-[60ch]">
       Accessible Perceptual Contrast Algorithm (APCA) by Andrew Somers is a
       WCAG 3 working draft and may change later. To learn more visit{' '}
       <a
@@ -182,7 +182,7 @@ const Key = ({
   ...props
 }: HTMLAttributes<HTMLSpanElement>) => (
   <span
-    className="inline-block min-w-7 rounded border border-(--color-border-subtle) bg-(--color-interactive-bg) px-1 text-center"
+    className="inline-block min-w-28 rounded border border-(--color-border-subtle) bg-(--color-interactive-bg) px-4 text-center"
     {...props}
   >
     {children}

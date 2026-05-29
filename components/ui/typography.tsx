@@ -14,7 +14,7 @@ const typographyVariants = cva('', {
       blockquote: 'mt-16 border-l-2 border-border pl-16 italic text-muted-foreground',
       list: 'my-16 ml-24 list-disc text-foreground [&>li]:mt-8',
       'inline-code':
-        'relative rounded bg-muted px-4 py-2 font-mono text-sm font-medium text-foreground',
+        'relative rounded bg-muted px-16 py-8 font-mono text-sm font-medium text-foreground',
       lead: 'text-xl text-muted-foreground',
       large: 'text-lg font-semibold',
       small: 'text-sm font-medium leading-none',

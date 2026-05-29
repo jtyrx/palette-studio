@@ -11,7 +11,7 @@ const radioGroupBase = 'ns-control-group'
 
 const radioGroupSegmentedBase = cn(
   'inline-flex items-center rounded-full',
-  'h-33 bg-toolbar-control-surface-sunken py-4 px-2',
+  'h-33 bg-toolbar-control-surface-sunken py-4 px-8',
 )
 
 const radioGroupItemBase = cn(
@@ -35,7 +35,7 @@ const radioGroupVariants = cva(radioGroupBase, {
       default: 'bg-overlay',
       scrim: cn(
         radioGroupSegmentedBase,
-        'gap-x-0.5',
+        'gap-x-2',
         'text-micro text-trim-both',
       ),
       icon: cn(radioGroupSegmentedBase, 'gap-x-0.5'),

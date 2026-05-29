@@ -82,7 +82,7 @@ const sliderFieldVariants = cva('grid w-full', {
       stacked: '',
       inline: cn(
         'grid-cols-[minmax(0,1fr)_minmax(8rem,2fr)]',
-        'items-center gap-x-3',
+        'items-center gap-x-12',
       ),
     },
   },

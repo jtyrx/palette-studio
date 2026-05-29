@@ -22,7 +22,7 @@ export const ColorInfo: FC<{ variant?: ColorInfoVariant }> = ({
       id="color-info"
       data-slot="color-info"
       data-variant={variant}
-      className={cn('flex flex-col', isSidebar ? 'gap-7' : 'gap-4')}
+      className={cn('flex flex-col', isSidebar ? 'gap-28' : 'gap-16')}
     >
       <ContrastGroup
         variant={variant}
@@ -62,7 +62,7 @@ const ContrastGroup: FC<{
       data-slot="contrast-comparison"
       data-versus={props.versusKey}
       className={cn(
-        'grid gap-2',
+        'grid gap-8',
         isSidebar
           ? 'grid-cols-1'
           : 'grid-cols-3 max-[640px]:grid-cols-1',
@@ -71,20 +71,20 @@ const ContrastGroup: FC<{
       <div
         className={cn(
           'col-span-full',
-          isSidebar ? 'pb-0.5 text-left' : 'pt-2 text-center',
+          isSidebar ? 'pb-2 text-left' : 'pt-8 text-center',
         )}
         data-slot="contrast-comparison-header"
       >
         <h4
           className={cn(
-            'flex flex-wrap gap-2 text-sm font-medium text-default',
+            'flex flex-wrap gap-8 text-sm font-medium text-default',
             isSidebar ? 'items-baseline justify-start' : 'items-center justify-center',
           )}
         >
           <span>{name} vs.</span>
           <Input
             variant="workbench"
-            className="inline-flex h-8 w-auto min-w-16 max-w-full"
+            className="inline-flex h-(--spacing-widget-sm) w-auto min-w-64 max-w-full"
             value={colorInput}
             onChange={e => {
               setColorInput(e.target.value)

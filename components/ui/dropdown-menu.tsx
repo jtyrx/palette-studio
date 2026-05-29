@@ -22,7 +22,7 @@ const dropdownMenuContentVariants = cva(
     variants: {
       variant: {
         default: cn(
-          'min-w-128 rounded-md border-border bg-default p-4',
+          'min-w-128 rounded-md border-border bg-default p-16',
           'text-default',
         ),
         panel: cn(
@@ -50,7 +50,7 @@ const dropdownMenuLabelVariants = cva('', {
 const dropdownMenuSeparatorVariants = cva('h-px', {
   variants: {
     variant: {
-      default: 'my-4 bg-border',
+      default: 'my-16 bg-border',
       panel: 'mx-12 bg-border/80',
     },
   },
@@ -73,7 +73,7 @@ const dropdownMenuItemVariants = cva(
           'focus:bg-accent focus:text-accent-foreground',
         ),
         panel: cn(
-          'mb-2 cursor-pointer items-start justify-between gap-12 rounded-xl p-10',
+          'mb-8 cursor-pointer items-start justify-between gap-12 rounded-xl p-10',
           'text-left font-light text-foreground last:mb-0',
           'focus:bg-accent/80 data-[active=true]:bg-muted/50',
         ),
@@ -87,7 +87,7 @@ const dropdownMenuListVariants = cva('', {
   variants: {
     variant: {
       default: '',
-      panel: 'p-6',
+      panel: 'p-24',
     },
   },
   defaultVariants: {variant: 'default'},

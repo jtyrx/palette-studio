@@ -2,7 +2,7 @@ import * as React from 'react'
 
 /** Shared surface for native `<select>` controls (not the shadcn/base-ui Button). */
 const controlSurfaceClass =
-  'inline-flex cursor-pointer items-center justify-center gap-2 rounded-(--radius-m) border-0 bg-(--color-interactive-bg) px-2 py-1.5 text-sm leading-5 text-(--color-text-secondary) transition-[color,background-color,transform] duration-100 ease-out hover:bg-(--color-interactive-bg-hover) hover:text-(--color-text-primary) active:translate-y-px active:bg-(--color-interactive-bg-active) focus:outline-none focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-[3px] focus-visible:outline-(--color-text-primary)'
+  'inline-flex cursor-pointer items-center justify-center gap-8 rounded-(--radius-m) border-0 bg-(--color-interactive-bg) px-8 py-6 text-sm leading-5 text-(--color-text-secondary) transition-[color,background-color,transform] duration-100 ease-out hover:bg-(--color-interactive-bg-hover) hover:text-(--color-text-primary) active:translate-y-px active:bg-(--color-interactive-bg-active) focus:outline-none focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-[3px] focus-visible:outline-(--color-text-primary)'
 
 export const Select = React.forwardRef<
   HTMLSelectElement,
@@ -40,7 +40,7 @@ export const InvisibleInput = React.forwardRef<
 })
 
 const inputClass =
-  'rounded-(--radius-m) border border-transparent bg-(--color-interactive-bg) px-2 py-[0.3125rem] text-sm leading-5 text-(--color-text-primary) transition-[border-color,color] duration-100 focus:border-(--color-text-primary) focus:text-(--color-text-primary) focus:outline-none'
+  'rounded-(--radius-m) border border-transparent bg-(--color-interactive-bg) px-8 py-[0.3125rem] text-sm leading-5 text-(--color-text-primary) transition-[border-color,color] duration-100 focus:border-(--color-text-primary) focus:text-(--color-text-primary) focus:outline-none'
 
 export const Input = React.forwardRef<
   HTMLInputElement,

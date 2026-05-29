@@ -561,7 +561,7 @@ function Sidebar({
         className={cn(
           sidebarDesktopContainerBase,
           variant === 'floating' || variant === 'inset'
-            ? 'py-8 ps-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+1rem+2px)]'
+            ? 'py-8 ps-8 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+1rem+2px)]'
             : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l',
           className,
         )}
@@ -1175,7 +1175,7 @@ function SidebarMenuSub({className, ...props}: React.ComponentProps<'ul'>) {
       data-slot="sidebar-menu-sub"
       data-sidebar="menu-sub"
       className={cn(
-        'mx-14 flex min-w-0 translate-x-px flex-col gap-4 border-l border-sidebar-border px-10 py-2 group-data-[collapsible=icon]:hidden',
+        'mx-14 flex min-w-0 translate-x-px flex-col gap-4 border-l border-sidebar-border px-10 py-8 group-data-[collapsible=icon]:hidden',
         className,
       )}
       {...props}

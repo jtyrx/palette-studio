@@ -34,19 +34,19 @@ export const ColorActions = () => {
           onClick={pushColorsIntoRgb}
           title="Not all LCH colors are displayable in RGB color space. This button will tweak all LCH values to be displayable."
         >
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-8">
             <Minimize />
             Make colors displayable
           </span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={currentHueToRow}>
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-8">
             <EqualizeH />
             Apply current hue to row
           </span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={currentLuminanceToColumn}>
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-8">
             <EqualizeL />
             Apply current luminance to column
           </span>

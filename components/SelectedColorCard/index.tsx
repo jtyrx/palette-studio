@@ -33,24 +33,24 @@ function ValueRow({
 
   return (
     <div
-      className="flex min-h-0 flex-1 flex-col gap-1"
+      className="flex min-h-0 flex-1 flex-col gap-4"
       data-slot={`selected-color-value-${label.toLowerCase()}`}
     >
       <button
         type="button"
         onClick={onCopy}
-        className="flex h-full min-h-10 w-full cursor-pointer items-stretch overflow-hidden rounded-(--radius-m) bg-(--color-interactive-bg) text-left transition-colors hover:bg-(--color-interactive-bg-hover) focus:outline-none focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-(--color-text-primary)"
+        className="flex h-full min-h-40 w-full cursor-pointer items-stretch overflow-hidden rounded-(--radius-m) bg-(--color-interactive-bg) text-left transition-colors hover:bg-(--color-interactive-bg-hover) focus:outline-none focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-(--color-text-primary)"
         title={copied ? 'Copied' : `Copy ${label}`}
       >
-        <span className="flex w-8 shrink-0 items-center justify-center border-r border-(--color-border-subtle) text-sm font-medium text-(--color-text-hint)">
+        <span className="flex w-32 shrink-0 items-center justify-center border-r border-(--color-border-subtle) text-sm font-medium text-(--color-text-hint)">
           {label}
         </span>
-        <span className="min-w-0 flex-1 truncate px-3 py-2 font-mono text-sm text-(--color-text-primary)">
+        <span className="min-w-0 flex-1 truncate px-12 py-8 font-mono text-sm text-(--color-text-primary)">
           {copied ? 'Copied!' : value}
         </span>
       </button>
       {hint ? (
-        <p className="px-1 text-xs text-(--color-text-hint)">{hint}</p>
+        <p className="px-4 text-xs text-(--color-text-hint)">{hint}</p>
       ) : null}
     </div>
   )
@@ -79,7 +79,7 @@ function Swatch({
       style={style}
       data-color-gamut={gamut}
     >
-      <span className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-(--color-surface-default)/80 px-2.5 py-0.5 text-xs font-medium text-(--color-text-primary) backdrop-blur-sm">
+      <span className="absolute bottom-8 left-1/2 -translate-x-1/2 rounded-full bg-(--color-surface-default)/80 px-10 py-2 text-xs font-medium text-(--color-text-primary) backdrop-blur-sm">
         {label}
       </span>
     </div>
@@ -96,11 +96,11 @@ export function SelectedColorCard() {
     <section
       id="selected-color-card"
       data-slot="selected-color-card"
-      className="grid grid-cols-2 gap-3"
+      className="grid grid-cols-2 gap-12"
       aria-label={`Selected color ${swatchName}`}
     >
       <div
-        className="flex min-h-44 flex-col gap-3"
+        className="flex min-h-44 flex-col gap-12"
         data-slot="selected-color-swatches"
       >
         <Swatch label="P3" gamut="p3" background={display.p3Background} />
@@ -112,7 +112,7 @@ export function SelectedColorCard() {
       </div>
 
       <div
-        className="flex min-h-44 flex-col gap-3"
+        className="flex min-h-44 flex-col gap-12"
         data-slot="selected-color-values"
       >
         <ValueRow label="O" value={display.oklch} />
